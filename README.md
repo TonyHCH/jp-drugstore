@@ -1,4 +1,4 @@
-# 日本藥妝網店｜第二版（Next.js），等待部署上線
+# 日本藥妝網店｜第二版已上線 Vercel，待建立管理員帳戶
 
 日本藥妝代購網店的正式版，由 Claude 於 2026年10月28日以 Next.js 重寫。第一版是 claude.ai 上的 Artifact，只限登入 Claude 的人使用；第二版放在 Vercel，客人不用登入就可以直接瀏覽和落單。本機資料夾是主版本。
 
@@ -29,12 +29,21 @@
 管理員以電郵及密碼登入 /admin。帳戶在 Supabase 後台 Authentication 建立，電郵要加入 admins 資料表才有管理權限。
 
 ## 網上版
-- 網站：待部署
+- 網站：https://jp-drugstore-tonyhch.vercel.app
+- 管理介面：https://jp-drugstore-tonyhch.vercel.app/admin
+- 程式碼：https://github.com/TonyHCH/jp-drugstore（公開，因為 Claude 的 GitHub 權限需要；內裏沒有任何金鑰）
+- Supabase 項目：jp-drugstore（新加坡，項目編號 gjldtzwcqululkioaleu）
+- Vercel 項目：jp-drugstore（伺服器在香港）
 - 第一版（Artifact）：https://claude.ai/code/artifact/79707fd5-1f92-4dbf-ac8f-90663384d275
+
+## 更新方法
+本機改好後 git commit，推送到 GitHub，再由 Claude 用 Vercel 連接器重新部署。Vercel 項目暫時未接駁 GitHub 自動部署，如想推送後自動上線，可在 Vercel 後台項目設定的 Git 一頁接駁 TonyHCH/jp-drugstore。
 
 ## 同步紀錄
 - 2026-10-28：第二版完成，本機以模擬資料庫測試店面、落單、優惠碼、管理介面、相片上載及權限，全部正常
 - 2026-10-28：Supabase 項目 jp-drugstore（新加坡）建立，資料表、權限及示範資料已匯入；Vercel 項目 jp-drugstore 建立，伺服器設在香港
 
+- 2026-10-28：部署上線，網上實測落單、優惠碼及權限（成本和優惠碼清單對外不可讀）正常；管理員電郵已加入名單
+
 ## 下一步
-在 Supabase 建立資料庫，經 GitHub 部署到 Vercel，再建立管理員帳戶。
+在 Supabase 後台 Authentication 以管理員電郵建立帳戶並設定密碼，然後登入 /admin，清走示範產品及訂單，上架真貨。

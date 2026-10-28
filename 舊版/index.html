@@ -1,0 +1,1188 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>日本藥妝網店</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&display=swap">
+<style>
+/* Layout: 日本藥妝店貨架感，白淨藥局底色，價錢以黃色 POP 價錢牌呈現；首頁由公告、信心標誌、篩選、排行、專題、最近瀏覽到產品網格；管理介面分頁收在同一頁 */
+:root{
+  --bg:#f3f6f5;--surface:#ffffff;--ink:#1b2829;--muted:#5c6c6d;--line:#d9e2e0;
+  --accent:#1c5d7a;--accent-ink:#ffffff;--accent-soft:#e3eef2;
+  --pop:#ffd84a;--pop-ink:#1f1a05;--sale:#c8322f;--sale-ink:#ffffff;
+  --good:#2e7d4f;--warn:#a35a12;--bad:#b23a3a;--ph:#e8efed;
+  --good-soft:#e2f2e8;--warn-soft:#f8ecdc;--bad-soft:#f6e1e1;
+  --shadow:0 1px 2px rgba(20,40,45,.06),0 6px 20px rgba(20,40,45,.06);
+  --f-display:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111819;--surface:#192224;--ink:#e4edec;--muted:#9aaaa9;--line:#2a3638;
+  --accent:#78b8d3;--accent-ink:#0d1a20;--accent-soft:#1d3038;--pop:#e9c53c;--pop-ink:#1f1a05;--sale:#e0605c;--sale-ink:#1a0505;
+  --good:#6cc28f;--warn:#e0a35a;--bad:#e27a7a;--ph:#202b2d;--good-soft:#1c3226;--warn-soft:#382a18;--bad-soft:#3a2020;
+  --shadow:0 1px 2px rgba(0,0,0,.3);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111819;--surface:#192224;--ink:#e4edec;--muted:#9aaaa9;--line:#2a3638;
+  --accent:#78b8d3;--accent-ink:#0d1a20;--accent-soft:#1d3038;--pop:#e9c53c;--pop-ink:#1f1a05;--sale:#e0605c;--sale-ink:#1a0505;
+  --good:#6cc28f;--warn:#e0a35a;--bad:#e27a7a;--ph:#202b2d;--good-soft:#1c3226;--warn-soft:#382a18;--bad-soft:#3a2020;
+  --shadow:0 1px 2px rgba(0,0,0,.3);color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+.announce{background:var(--pop);color:var(--pop-ink);font-size:.88rem;font-weight:500}
+.announce .wrap{padding-block:7px;text-align:center}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:10px;padding-block:12px}
+.brand{flex:1;min-width:0}
+.brand h1{margin:0;font-family:var(--f-display);font-weight:900;font-size:1.3rem;line-height:1.2;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;color:var(--muted);font-size:.74rem;letter-spacing:.08em}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-weight:500;font-size:.9rem;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;text-decoration:none;color:var(--ink)}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.danger{color:var(--bad);border-color:var(--bad)}
+.btn.sm{padding:4px 10px;font-size:.82rem}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.count{background:var(--pop);color:var(--pop-ink);border-radius:999px;min-width:22px;height:22px;padding:0 6px;font-size:.8rem;font-weight:700;display:inline-grid;place-items:center;font-variant-numeric:tabular-nums}
+
+.hero{padding-block:22px 4px}
+.hero p.tag{margin:0;font-size:1.02rem;max-width:60ch}
+.round{display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;margin-top:14px;padding:12px 16px;background:var(--accent-soft);border-radius:12px;font-size:.92rem}
+.round b{font-weight:700;color:var(--accent)}
+.round span{white-space:nowrap}
+.round .cd{font-variant-numeric:tabular-nums}
+.round .closed{color:var(--bad);font-weight:700}
+.trust{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+@media (max-width:760px){.trust{grid-template-columns:1fr 1fr}}
+.trust div{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 12px;font-size:.82rem;color:var(--muted);line-height:1.4;min-width:0}
+.trust b{display:block;color:var(--ink);font-size:.88rem;font-weight:700}
+
+.tools{display:flex;gap:10px;flex-wrap:wrap;padding-top:18px}
+.search{flex:1 1 240px;min-width:0;position:relative}
+.search input{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:9px 16px 9px 38px}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2}
+.sel{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:9px 14px;max-width:100%}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-block:12px 4px;scrollbar-width:none}
+.chips.sub{padding-block:8px 14px;align-items:center}
+.chips.sub .lbl2{font-size:.8rem;color:var(--muted);white-space:nowrap}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 16px;font-size:.9rem;white-space:nowrap}
+.chips.sub .chip{padding:4px 12px;font-size:.84rem}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.active-filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:.86rem;color:var(--muted);margin-bottom:12px}
+
+.shelf{margin-block:4px 22px}
+.shelf h2{font-family:var(--f-display);font-size:1.05rem;margin:0 0 4px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.shelf h2 small{font-family:var(--f-body);font-weight:400;font-size:.8rem;color:var(--muted)}
+.shelf p.sd{margin:0 0 10px;color:var(--muted);font-size:.88rem;max-width:65ch}
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(150px,170px);gap:12px;overflow-x:auto;padding-bottom:6px}
+.rank-list{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,1fr);gap:10px;overflow-x:auto;padding-bottom:4px}
+.rk{display:grid;grid-template-columns:auto 56px 1fr;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px 8px 10px;text-align:left}
+.rk .no{font-family:var(--f-display);font-weight:900;font-size:1.4rem;color:var(--accent);width:22px;text-align:center}
+.rk:nth-child(1) .no{color:var(--warn)}
+.rk .t{min-width:0;font-size:.86rem;line-height:1.35}
+.rk .t span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-weight:700}
+.rk .t small{color:var(--muted)}
+.mini{width:56px;height:56px;border-radius:8px;overflow:hidden;background:var(--ph);position:relative;flex:none}
+.mini img{width:100%;height:100%;object-fit:cover}
+.mini .ph{font-size:1.5rem}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:14px;padding-bottom:28px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;text-align:left;padding:0;position:relative;min-width:0}
+.card:hover{box-shadow:var(--shadow)}
+.thumb{aspect-ratio:1/1;width:100%;max-width:100%;background:var(--ph);position:relative;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.ph{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:3.4rem;color:var(--muted);opacity:.55}
+.badges{position:absolute;top:8px;left:8px;right:40px;display:flex;gap:4px;flex-wrap:wrap}
+.badge{font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:4px;background:var(--surface);color:var(--ink);border:1px solid var(--line);letter-spacing:.04em;white-space:nowrap}
+.badge.hot{background:var(--bad);color:#fff;border-color:var(--bad)}
+.badge.new{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.badge.ltd{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.badge.eg{background:var(--pop);color:var(--pop-ink);border-color:var(--pop)}
+.badge.sale{background:var(--sale);color:var(--sale-ink);border-color:var(--sale)}
+.badge.award{background:var(--surface);color:var(--warn);border-color:var(--warn)}
+.favmark{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;background:var(--surface);display:grid;place-items:center;color:var(--bad);font-size:.85rem}
+.cbody{padding:10px 12px 12px;display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.cbrand{font-size:.74rem;color:var(--muted);letter-spacing:.06em}
+.cname{font-weight:700;font-size:.95rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cjp{font-size:.76rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cmeta{font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums;display:flex;gap:8px;flex-wrap:wrap}
+.cmeta .left{color:var(--sale);font-weight:700}
+.cmeta .save{color:var(--good);font-weight:700}
+.crow{display:flex;align-items:end;justify-content:space-between;gap:6px;margin-top:auto;padding-top:6px;flex-wrap:wrap}
+.pop{background:var(--pop);color:var(--pop-ink);border-radius:4px;padding:2px 8px 1px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.2;transform:rotate(-2deg);display:inline-block}
+.pop.on-sale{background:var(--sale);color:var(--sale-ink)}
+.pop small{font-size:.7rem;font-weight:700;margin-right:1px}
+.pop .n{font-size:1.25rem}
+.was{font-size:.78rem;color:var(--muted);text-decoration:line-through;font-variant-numeric:tabular-nums;margin-left:4px}
+.st{font-size:.74rem;font-weight:500;white-space:nowrap}
+.st.preorder{color:var(--accent)}.st.instock{color:var(--good)}.st.soldout{color:var(--bad)}
+.card.soldout .thumb{opacity:.55}
+.rail .card .cname{font-size:.88rem}
+.rail .card .pop .n{font-size:1.05rem}
+
+.empty{grid-column:1/-1;border:1px dashed var(--line);border-radius:14px;padding:40px 20px;text-align:center;color:var(--muted)}
+.empty strong{display:block;color:var(--ink);font-size:1.05rem;margin-bottom:4px}
+
+.info{border-top:1px solid var(--line);padding-block:24px 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px}
+.info h2{font-family:var(--f-display);font-size:1.1rem;margin:0 0 12px}
+.steps{display:grid;gap:12px;margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:10px;align-items:flex-start;font-size:.92rem;color:var(--muted)}
+.steps li::before{content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:700;display:grid;place-items:center;font-size:.85rem}
+.steps li b{color:var(--ink);display:block}
+.faq details{border-bottom:1px solid var(--line);padding-block:10px}
+.faq summary{cursor:pointer;font-weight:500}
+.faq p{margin:8px 0 0;color:var(--muted);font-size:.92rem;white-space:pre-wrap}
+
+/* sheets */
+.overlay{position:fixed;inset:0;background:rgba(10,20,22,.45);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surface);width:100%;max-width:600px;max-height:92vh;max-height:92dvh;overflow:auto;border-radius:18px 18px 0 0;padding:18px max(18px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px))}
+@media (min-width:700px){.overlay{align-items:center}.sheet{border-radius:18px;max-height:88vh}}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.sheet-head h3{margin:0;font-family:var(--f-display);font-size:1.15rem;text-wrap:balance}
+.x{border:0;background:transparent;font-size:1.5rem;line-height:1;padding:4px 8px;color:var(--muted)}
+.gal-main{aspect-ratio:1/1;max-width:100%;width:100%;border-radius:12px;overflow:hidden;background:var(--ph);position:relative}
+.gal-main img{width:100%;height:100%;object-fit:cover}
+.gal-thumbs{display:flex;gap:8px;margin-top:8px;overflow-x:auto}
+.gal-thumbs button{width:56px;height:56px;flex:none;border-radius:8px;overflow:hidden;border:2px solid transparent;padding:0;background:var(--ph)}
+.gal-thumbs button[aria-pressed="true"]{border-color:var(--accent)}
+.gal-thumbs img{width:100%;height:100%;object-fit:cover}
+.salebox{margin-top:12px;background:var(--bad-soft);color:var(--sale);border-radius:10px;padding:8px 12px;font-size:.88rem;font-weight:700;font-variant-numeric:tabular-nums}
+.savebox{margin-top:8px;background:var(--good-soft);color:var(--good);border-radius:10px;padding:8px 12px;font-size:.88rem;font-variant-numeric:tabular-nums}
+.awardline{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;font-size:.86rem}
+.awardline span{border:1px solid var(--warn);color:var(--warn);border-radius:999px;padding:2px 10px;font-weight:500}
+.specs{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:.88rem;margin:12px 0 0;padding:10px 12px;background:var(--bg);border-radius:10px}
+.specs dt{color:var(--muted)}
+.specs dd{margin:0;min-width:0;font-variant-numeric:tabular-nums}
+.tagrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.tagrow button{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:2px 10px;font-size:.8rem;color:var(--muted)}
+.desc{white-space:pre-wrap;color:var(--ink);font-size:.92rem;margin:12px 0 0}
+.more details{border-top:1px solid var(--line);padding-block:10px}
+.more details:first-child{margin-top:12px}
+.more summary{cursor:pointer;font-weight:500;font-size:.92rem}
+.more p{white-space:pre-wrap;color:var(--muted);font-size:.88rem;margin:6px 0 0}
+.rev{border-top:1px solid var(--line);padding-block:8px;font-size:.88rem}
+.rev .stars{color:var(--warn);letter-spacing:1px}
+.rev b{font-weight:500}
+.rev p{margin:2px 0 0;color:var(--muted)}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px}
+.qty button{border:0;background:transparent;width:34px;height:34px;font-size:1.1rem}
+.qty span{min-width:28px;text-align:center;font-variant-numeric:tabular-nums;font-weight:700}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.favbtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:40px;height:40px;font-size:1.1rem;color:var(--muted);flex:none}
+.favbtn[aria-pressed="true"]{color:var(--bad);border-color:var(--bad)}
+.related{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}
+.related h4{margin:0 0 8px;font-size:.92rem}
+.related .rail{grid-auto-columns:120px}
+.related .card .cbody{padding:8px}
+.related .card .cname{font-size:.8rem}
+.related .card .pop .n{font-size:.95rem}
+.citem{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;padding-block:10px;border-bottom:1px solid var(--line)}
+.citem .mini{width:52px;height:52px}
+.citem .nm{min-width:0;font-size:.9rem;line-height:1.35}
+.citem .nm small{color:var(--muted);display:block;font-variant-numeric:tabular-nums}
+.sum{display:grid;gap:4px;padding-block:12px;font-variant-numeric:tabular-nums;font-size:.92rem}
+.sum div{display:flex;justify-content:space-between;gap:10px}
+.sum .disc{color:var(--good)}
+.sum .tot{font-weight:700;font-size:1.05rem;border-top:1px solid var(--line);padding-top:8px;margin-top:4px}
+.sum .hint{text-align:right}
+.promo{display:flex;gap:8px;margin-top:4px}
+.promo input{flex:1;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:7px 14px;text-transform:uppercase}
+
+form.f{display:grid;gap:12px}
+.fld{display:grid;gap:4px;min-width:0}
+.fld label,.lbl{font-size:.8rem;color:var(--muted);letter-spacing:.04em}
+.fld input,.fld select,.fld textarea{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:9px 12px}
+.fld textarea{min-height:80px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:480px){.two,.three{grid-template-columns:1fr}}
+.grp{border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:12px}
+.grp>legend{font-size:.82rem;font-weight:700;padding:0 6px;color:var(--accent)}
+.checks{display:flex;flex-wrap:wrap;gap:6px 14px}
+.checks label{display:flex;gap:6px;align-items:center;font-size:.88rem;color:var(--ink);letter-spacing:0}
+.hint{font-size:.8rem;color:var(--muted);margin:0}
+.calc{background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:.88rem;display:flex;gap:6px 18px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.calc b{color:var(--accent)}
+.out{width:100%;min-height:220px;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--bg);font-family:var(--f-body);font-size:.88rem;white-space:pre;overflow:auto}
+.pay{background:var(--good-soft);border-radius:10px;padding:10px 14px;font-size:.9rem;margin-top:12px}
+.pay div{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.photos{display:flex;gap:8px;flex-wrap:wrap}
+.photos .pv{width:72px;height:72px;border-radius:10px;overflow:hidden;background:var(--ph);position:relative}
+.photos .pv img{width:100%;height:100%;object-fit:cover}
+.photos .pv button{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:.8rem;line-height:1;padding:0}
+.photos .pv .cv{position:absolute;left:3px;bottom:3px;font-size:.66rem;background:var(--pop);color:var(--pop-ink);border-radius:3px;padding:0 4px;font-weight:700}
+.addph{width:72px;height:72px;border-radius:10px;border:1px dashed var(--line);display:grid;place-items:center;color:var(--muted);font-size:.78rem;text-align:center;cursor:pointer;position:relative}
+.addph input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.picklist{max-height:280px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:6px 10px;display:grid;gap:2px}
+.picklist label{display:flex;gap:8px;align-items:center;font-size:.88rem;padding-block:3px;letter-spacing:0;color:var(--ink)}
+
+/* admin */
+.admin{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;margin-block:18px}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:-4px 0 16px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.tab{border:0;background:transparent;padding:8px 12px;border-radius:8px 8px 0 0;font-weight:500;color:var(--muted);white-space:nowrap;display:inline-flex;gap:6px;align-items:center}
+.tab[aria-pressed="true"]{color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent)}
+.admin h2{margin:0 0 4px;font-family:var(--f-display);font-size:1.1rem}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-block:12px}
+.kpi{background:var(--bg);border-radius:10px;padding:10px 12px}
+.kpi small{display:block;color:var(--muted);font-size:.76rem}
+.kpi b{font-size:1.15rem;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto}
+.tbl table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:600px}
+.tbl th,.tbl td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl th{font-size:.76rem;color:var(--muted);font-weight:500;letter-spacing:.06em}
+.tbl td.num,.tbl th.num{font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.m-good{color:var(--good);font-weight:700}.m-warn{color:var(--warn);font-weight:700}.m-bad{color:var(--bad);font-weight:700}
+.olist{display:grid;gap:10px;margin-top:12px}
+.ocard{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px}
+.ocard .top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center}
+.ocard .code{font-weight:700;font-variant-numeric:tabular-nums}
+.ocard .meta{font-size:.84rem;color:var(--muted)}
+.ocard .items{font-size:.88rem}
+.ocard .foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.ocard select{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:5px 10px;font-size:.85rem}
+.pill{font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:999px;white-space:nowrap}
+.s-pending{background:var(--warn-soft);color:var(--warn)}
+.s-confirmed{background:var(--accent-soft);color:var(--accent)}
+.s-paid{background:var(--good-soft);color:var(--good)}
+.s-arrived{background:var(--accent);color:var(--accent-ink)}
+.s-done{background:var(--ph);color:var(--muted)}
+.s-cancelled{background:var(--bad-soft);color:var(--bad)}
+.check{display:flex;gap:8px;align-items:center;font-size:.88rem}
+.flist{display:grid;gap:10px;margin-top:12px}
+.fcard{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.fcard div{min-width:0}
+.fcard b{display:block}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:.9rem;z-index:60;max-width:calc(100% - 32px);text-align:center}
+.notice{background:var(--accent-soft);border-radius:12px;padding:12px 16px;font-size:.9rem;margin-top:12px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+
+<div class="announce" id="announce" hidden><div class="wrap" id="announceTxt"></div></div>
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><h1 id="shopName">日本藥妝預訂</h1><small>JAPAN DRUGSTORE · 日本直送香港</small></div>
+    <button class="btn" id="adminBtn" type="button" hidden>管理</button>
+    <button class="btn primary" id="cartBtn" type="button">預訂清單 <span class="count" id="cartCount">0</span></button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="tag" id="shopTag">日本藥妝、護膚及保健品代購，由日本買手定期採購，集中寄運香港。</p>
+    <div class="round" id="round"></div>
+    <div class="trust" id="trust"></div>
+    <div class="notice" id="dbNotice" hidden></div>
+  </section>
+
+  <div id="adminPanel" hidden></div>
+
+  <div id="storefront">
+    <div class="tools">
+      <label class="search" for="q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input id="q" type="search" placeholder="搜尋產品、品牌或日文名稱" autocomplete="off"></label>
+      <select class="sel" id="brandSel" aria-label="品牌"><option value="">所有品牌</option></select>
+      <select class="sel" id="sort" aria-label="排序">
+        <option value="new">最新上架</option><option value="hot">人氣</option><option value="sale">特價優先</option><option value="low">價錢由低至高</option><option value="high">價錢由高至低</option>
+      </select>
+    </div>
+    <nav class="chips" id="chips" aria-label="產品分類"></nav>
+    <nav class="chips sub" id="concerns" aria-label="按需要揀選"></nav>
+    <div class="active-filters" id="activeF" hidden></div>
+    <div id="shelves"></div>
+    <div class="grid" id="grid">
+      <div class="empty"><strong>產品載入中</strong>稍候片刻，貨架上的產品會在這裏出現。</div>
+    </div>
+  </div>
+
+  <section class="info">
+    <div>
+      <h2>預訂流程</h2>
+      <ol class="steps">
+        <li><span><b>揀選產品</b>將想要的產品加入預訂清單，截單前都可以修改。</span></li>
+        <li><span><b>傳送預訂單</b>填寫聯絡資料後產生預訂單，以 WhatsApp 傳給我們。</span></li>
+        <li><span><b>確認及付款</b>我們確認貨量及金額後通知付款，貨品到港即安排取貨。</span></li>
+      </ol>
+    </div>
+    <div class="faq" id="faq"></div>
+  </section>
+</main>
+
+<div class="overlay" id="ov" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const CATS=['護膚','化妝','保健品','日用品'];
+const CONCERNS=['保濕','美白','防曬','暗瘡','毛孔','敏感肌','抗老','眼睛疲勞','腸胃保養','睡眠質素','關節保養','日常營養'];
+const STATUS={preorder:'接受預訂',instock:'現貨',soldout:'售罄'};
+const TAGS={'':'無','新品':'新品','限定':'限定','熱賣':'熱賣'};
+const OST={pending:'待確認',confirmed:'已確認待付款',paid:'已付款',arrived:'已到港',done:'已取貨',cancelled:'已取消'};
+const DEF_RETURNS='代購貨品一經確認不設退換。如貨品於運送途中損壞或與訂單不符，請於取貨後48小時內以 WhatsApp 傳送相片通知我們處理。';
+const S={db:null,user:null,assets:null,canEdit:false,loaded:false,
+  products:[],settings:{},costs:{},config:{},orders:[],features:[],
+  filter:'全部',brand:'',concern:'',q:'',sort:'new',admin:false,tab:'products',ofilter:'all',paidOnly:false,
+  cart:{},fav:[],recent:[],promo:'',settingsDirty:false,editing:null,editPhotos:[],newFiles:[],confirmDel:false,parsed:null,openId:null};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>Number(n||0).toLocaleString('en-HK',{maximumFractionDigits:1});
+const yen=n=>'¥'+Number(n||0).toLocaleString('ja-JP');
+const num=v=>{if(v===''||v==null)return null;const n=parseFloat(v);return isNaN(n)?null:n};
+
+/* per-viewer conveniences */
+function ls(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v??d}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+S.cart=ls('cart_v1',{});S.fav=ls('fav_v1',[]);S.recent=ls('recent_v1',[]);
+const saveCart=()=>lsSet('cart_v1',S.cart);
+
+function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,2800)}
+async function copyText(t,el){try{await navigator.clipboard.writeText(t);toast('已複製')}catch(e){if(el){el.focus();el.select&&el.select()}toast('請長按或按 Ctrl+C 複製')}}
+
+/* pricing & stock */
+function saleOn(p){const sp=num(p.salePrice);if(sp==null||sp>=p.price)return false;if(!p.saleEnds)return true;const d=new Date(p.saleEnds);return isNaN(d)||d>Date.now()}
+const priceOf=p=>saleOn(p)?num(p.salePrice):p.price;
+const offPct=p=>saleOn(p)?Math.round((1-num(p.salePrice)/p.price)*100):0;
+function savePct(p){const hk=num(p.hkPrice);if(!hk||hk<=priceOf(p))return 0;return Math.round((1-priceOf(p)/hk)*100)}
+function remaining(p){const l=num(p.limitQty);if(!l)return null;return Math.max(0,l-(p.sold||0))}
+const isSoldout=p=>p.status==='soldout'||remaining(p)===0;
+function maxOf(p){const r=remaining(p);return Math.max(1,Math.min(99,num(p.maxPerOrder)||99,r==null?99:r))}
+function left(ms){const mins=Math.max(0,Math.floor(ms/60000)),d=Math.floor(mins/1440),h=Math.floor(mins%1440/60),m=mins%60;return `${d?d+'日 ':''}${h}小時 ${m}分`}
+
+/* images */
+const photosOf=p=>(p.photos&&p.photos.length)?p.photos:(p.photo?[p.photo]:[]);
+function phChar(p){return esc(((p.jpName||p.name||'?').trim()[0])||'?')}
+function img(p,i=0){
+  const ph=photosOf(p);const ch=phChar(p);
+  if(ph[i]) return `<img src="/_blob/${esc(ph[i])}" alt="" loading="lazy" data-ph="${ch}">`;
+  return `<div class="ph">${ch}</div>`;
+}
+document.addEventListener('error',e=>{const t=e.target;if(t.tagName==='IMG'&&t.dataset.ph!=null){const d=document.createElement('div');d.className='ph';d.textContent=t.dataset.ph;t.replaceWith(d)}},true);
+function badges(p){
+  let b='';
+  if(p.example) b+='<span class="badge eg">示例</span>';
+  if(saleOn(p)) b+=`<span class="badge sale">-${offPct(p)}%</span>`;
+  if(p.award) b+='<span class="badge award">得獎</span>';
+  if(p.tag==='熱賣') b+='<span class="badge hot">熱賣</span>';
+  if(p.tag==='新品') b+='<span class="badge new">新品</span>';
+  if(p.tag==='限定') b+='<span class="badge ltd">限定</span>';
+  return b?`<div class="badges">${b}</div>`:'';
+}
+function priceBlock(p){
+  const on=saleOn(p);
+  return `<span><span class="pop ${on?'on-sale':''}"><small>HK$</small><span class="n">${money(priceOf(p))}</span></span>${on?`<span class="was">HK$${money(p.price)}</span>`:''}</span>`;
+}
+function stText(p){return isSoldout(p)?'售罄':(STATUS[p.status]||'')}
+function stCls(p){return isSoldout(p)?'soldout':esc(p.status)}
+function cardHTML(p){
+  const r=remaining(p),sv=savePct(p);
+  const meta=[];
+  if(r!=null&&r>0&&r<=20)meta.push(`<span class="left">尚餘 ${r} 件</span>`);
+  if(sv>0)meta.push(`<span class="save">比香港平 ${sv}%</span>`);
+  if((p.sold||0)>0)meta.push(`<span>已預訂 ${p.sold}</span>`);
+  return `<button class="card ${isSoldout(p)?'soldout':''}" type="button" data-open="${esc(p.id)}">
+    <div class="thumb">${img(p)}${badges(p)}${S.fav.includes(p.id)?'<span class="favmark" aria-label="已收藏">♥</span>':''}</div>
+    <div class="cbody">
+      ${p.brand?`<span class="cbrand">${esc(p.brand)}</span>`:''}
+      <span class="cname">${esc(p.name)}</span>
+      ${p.jpName?`<span class="cjp">${esc(p.jpName)}</span>`:''}
+      ${meta.length?`<span class="cmeta">${meta.join('')}</span>`:''}
+      <div class="crow">${priceBlock(p)}<span class="st ${stCls(p)}">${stText(p)}</span></div>
+    </div></button>`;
+}
+
+/* cutoff */
+function cutDate(){const v=S.settings.cutoffAt;if(!v)return null;const d=new Date(v);return isNaN(d)?null:d}
+function fmtDate(d){const h=d.getHours(),m=String(d.getMinutes()).padStart(2,'0');
+  return `${d.getMonth()+1}月${d.getDate()}日（${'日一二三四五六'[d.getDay()]}）${h<12?'上午':h<18?'下午':'晚上'}${h%12||12}:${m}`}
+function cutText(){const d=cutDate();return d?fmtDate(d):(S.settings.cutoff||'')}
+function countdown(){
+  const d=cutDate();if(!d)return '';
+  const ms=d-Date.now();
+  if(ms<=0) return '<span class="closed">本輪已截單，新預訂將撥入下一輪</span>';
+  return `<span class="cd">距離截單 <b>${left(ms)}</b></span>`;
+}
+
+/* shipping & promo */
+function shipping(sub){
+  const fee=num(S.settings.shipFee)||0,free=num(S.settings.freeShip);
+  if(!fee) return {fee:0,label:'運費按取貨方式另計'};
+  if(free&&sub>=free) return {fee:0,label:'已達免運費門檻'};
+  return {fee,label:free?`滿 HK$${money(free)} 免運費，尚差 HK$${money(free-sub)}`:''};
+}
+function promoList(){return Array.isArray(S.settings.promos)?S.settings.promos:[]}
+function checkPromo(code,sub){
+  if(!code)return {disc:0};
+  const p=promoList().find(x=>String(x.code).toUpperCase()===code.toUpperCase());
+  if(!p)return {disc:0,err:'優惠碼無效'};
+  if(p.expires){const d=new Date(p.expires+'T23:59:59');if(!isNaN(d)&&d<Date.now())return {disc:0,err:'優惠碼已過期'}}
+  if(num(p.min)&&sub<num(p.min))return {disc:0,err:`需滿 HK$${money(p.min)} 才可使用`};
+  const disc=p.type==='pct'?Math.round(sub*num(p.value)/100):Math.min(sub,num(p.value)||0);
+  return {disc,code:String(p.code).toUpperCase(),label:p.type==='pct'?`${p.value}% 折扣`:`減 HK$${money(p.value)}`};
+}
+
+/* ---------- storefront render ---------- */
+function renderShop(){
+  const st=S.settings||{};
+  $('#shopName').textContent=st.name||'日本藥妝預訂';
+  $('#shopTag').textContent=st.tagline||'日本藥妝、護膚及保健品代購，由日本買手定期採購，集中寄運香港。';
+  $('#announce').hidden=!st.announcement;$('#announceTxt').textContent=st.announcement||'';
+  renderRound();renderTrust();renderFaq();
+}
+function renderRound(){
+  const st=S.settings||{};const r=[];
+  const ct=cutText();
+  if(ct) r.push(`<span>本輪截單 <b>${esc(ct)}</b></span>`);
+  const cd=countdown();if(cd) r.push(cd);
+  if(st.eta) r.push(`<span>預計到港 <b>${esc(st.eta)}</b></span>`);
+  const free=num(st.freeShip);if(free) r.push(`<span>滿 <b>HK$${money(free)}</b> 免運費</span>`);
+  if(!r.length) r.push('<span>預訂制：每輪集中截單，由日本採購後寄港。</span>');
+  $('#round').innerHTML=r.join('');
+}
+function renderTrust(){
+  const n=S.products.filter(p=>!isSoldout(p)).length;
+  $('#trust').innerHTML=[
+    ['日本實體店購入','可應要求提供購買單據'],
+    ['每輪集中寄運','拼箱運送，運費更相宜'],
+    ['香港本地取貨','順豐站、智能櫃或面交'],
+    ['廣東話客服',n?`WhatsApp 跟進，現有 ${n} 款產品`:'WhatsApp 跟進每張訂單']
+  ].map(([a,b])=>`<div><b>${a}</b>${esc(b)}</div>`).join('');
+}
+function renderFaq(){
+  const st=S.settings||{};
+  const pay=[st.fps?`轉數快（FPS）：${st.fps}`:null,st.payme?`PayMe：${st.payme}`:null].filter(Boolean).join('\n')||'我們確認訂單後，會以 WhatsApp 通知付款方式。';
+  const fee=num(st.shipFee),free=num(st.freeShip);
+  const ship=fee?`每張訂單運費 HK$${money(fee)}${free?`，滿 HK$${money(free)} 免運費`:''}。可選擇順豐站或智能櫃自取、送貨上門或約定地點面交。`:'運費按取貨方式另計，可選擇順豐站或智能櫃自取、送貨上門或約定地點面交。';
+  const qa=[
+    ['怎樣付款？',pay],
+    ['幾時會收到貨？',(st.eta?`本輪預計 ${st.eta} 到港。`:'')+'每輪截單後由日本買手集中採購，一般約兩至三星期到港，到港後我們會逐一通知取貨。'],
+    ['運費怎樣計算？',ship],
+    ['有沒有優惠碼？','有推廣時我們會在網頁頂部公佈優惠碼，在預訂清單輸入即可使用，每張預訂單限用一個。'],
+    ['產品是否正貨？','所有產品均由日本買手於日本藥妝店或官方渠道購入，可要求提供購買單據相片。'],
+    ['有甚麼產品不能代購？','噴霧、含大量酒精或易燃的產品，以及在香港須註冊的藥品，我們都不會代購。如有疑問，歡迎先以 WhatsApp 查詢。'],
+    ['可以退換嗎？',st.returns||DEF_RETURNS],
+    ['買不到怎麼辦？','如日本當地缺貨，我們會盡快通知你，並全數退回該產品的款項。']
+  ];
+  $('#faq').innerHTML='<h2>常見問題</h2>'+qa.map(([q,a])=>`<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('');
+}
+function renderFilters(){
+  const all=['全部',...CATS,'我的收藏'];
+  $('#chips').innerHTML=all.map(c=>`<button class="chip" type="button" data-cat="${c}" aria-pressed="${S.filter===c}">${c==='我的收藏'?'♥ 我的收藏':c}</button>`).join('');
+  const used=CONCERNS.filter(c=>S.products.some(p=>(p.concerns||[]).includes(c)));
+  $('#concerns').hidden=!used.length;
+  $('#concerns').innerHTML=used.length?`<span class="lbl2">按需要：</span>`+used.map(c=>`<button class="chip" type="button" data-con="${c}" aria-pressed="${S.concern===c}">${c}</button>`).join(''):'';
+  const brands=[...new Set(S.products.map(p=>p.brand).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));
+  const bs=$('#brandSel');
+  bs.innerHTML='<option value="">所有品牌</option>'+brands.map(b=>`<option value="${esc(b)}" ${b===S.brand?'selected':''}>${esc(b)}</option>`).join('');
+  if(S.brand&&!brands.includes(S.brand))S.brand='';
+  const af=[];
+  if(S.brand)af.push(`品牌：${esc(S.brand)}`);
+  if(S.concern)af.push(`需要：${esc(S.concern)}`);
+  $('#activeF').hidden=!af.length;
+  $('#activeF').innerHTML=af.length?`<span>篩選中：${af.join('，')}</span><button class="btn sm" type="button" data-clearf>清除篩選</button>`:'';
+}
+const filtering=()=>S.q||S.filter!=='全部'||S.brand||S.concern;
+function visible(){
+  const q=S.q.trim().toLowerCase();
+  let list=S.products.filter(p=>{
+    if(S.filter==='我的收藏'){if(!S.fav.includes(p.id))return false}
+    else if(S.filter!=='全部'&&p.category!==S.filter)return false;
+    if(S.brand&&p.brand!==S.brand)return false;
+    if(S.concern&&!(p.concerns||[]).includes(S.concern))return false;
+    if(!q)return true;
+    return [p.name,p.jpName,p.brand,p.desc,p.category,p.size,(p.concerns||[]).join(' ')].some(v=>String(v||'').toLowerCase().includes(q));
+  });
+  const so=S.sort;list=list.slice();
+  if(so==='hot')list.sort((a,b)=>(b.sold||0)-(a.sold||0));
+  else if(so==='low')list.sort((a,b)=>priceOf(a)-priceOf(b));
+  else if(so==='high')list.sort((a,b)=>priceOf(b)-priceOf(a));
+  else if(so==='sale')list.sort((a,b)=>offPct(b)-offPct(a));
+  if(so!=='new')list.sort((a,b)=>isSoldout(a)-isSoldout(b));
+  return list;
+}
+function renderShelves(){
+  const el=$('#shelves');
+  if(!S.loaded||filtering()){el.innerHTML='';return}
+  let h='';
+  const top=S.products.filter(p=>(p.sold||0)>0&&!isSoldout(p)).sort((a,b)=>b.sold-a.sold).slice(0,5);
+  if(top.length>=2){
+    h+=`<section class="shelf"><h2>人氣排行 <small>按已預訂件數</small></h2><div class="rank-list">${top.map((p,i)=>`
+      <button class="rk" type="button" data-open="${esc(p.id)}"><span class="no">${i+1}</span><span class="mini">${img(p)}</span>
+      <span class="t"><span>${esc(p.name)}</span><small>已預訂 ${p.sold} 件 · HK$${money(priceOf(p))}</small></span></button>`).join('')}</div></section>`;
+  }
+  const sales=S.products.filter(p=>saleOn(p)&&!isSoldout(p));
+  if(sales.length){
+    const ends=sales.map(p=>p.saleEnds?new Date(p.saleEnds):null).filter(d=>d&&!isNaN(d)).sort((a,b)=>a-b)[0];
+    h+=`<section class="shelf"><h2>限時特價 ${ends?`<small>最快 ${left(ends-Date.now())} 後結束</small>`:''}</h2><div class="rail">${sales.map(cardHTML).join('')}</div></section>`;
+  }
+  S.features.slice().sort((a,b)=>(a.order||0)-(b.order||0)).forEach(f=>{
+    const ps=(f.productIds||[]).map(id=>S.products.find(p=>p.id===id)).filter(Boolean);
+    if(!ps.length)return;
+    h+=`<section class="shelf"><h2>${esc(f.title)}</h2>${f.desc?`<p class="sd">${esc(f.desc)}</p>`:''}<div class="rail">${ps.map(cardHTML).join('')}</div></section>`;
+  });
+  const rec=S.recent.map(id=>S.products.find(p=>p.id===id)).filter(Boolean).slice(0,10);
+  if(rec.length){
+    h+=`<section class="shelf"><h2>最近瀏覽</h2><div class="rail">${rec.map(cardHTML).join('')}</div></section>`;
+  }
+  if(h)h+=`<h2 style="font-family:var(--f-display);font-size:1.05rem;margin:0 0 10px">全部產品</h2>`;
+  el.innerHTML=h;
+}
+function renderGrid(){
+  const g=$('#grid');
+  if(!S.loaded)return;
+  const list=visible();
+  if(!list.length){
+    let t,m;
+    if(!S.products.length){t='貨架暫時是空的';m=S.canEdit?'按右上角「管理」，再按「上架新產品」，上載相片和填寫價錢即可。':'產品正在準備中，稍後再來看看。'}
+    else if(S.q){t='找不到相關產品';m=`沒有產品符合「${esc(S.q)}」，可試試品牌名稱或日文名稱。`}
+    else if(S.filter==='我的收藏'){t='未有收藏產品';m='在產品頁按 ♥，產品就會收藏在這裏。'}
+    else{t='沒有符合篩選的產品';m='可以清除篩選，或看看其他分類。'}
+    g.innerHTML=`<div class="empty"><strong>${t}</strong>${m}</div>`;return;
+  }
+  g.innerHTML=list.map(cardHTML).join('');
+}
+function renderCartCount(){$('#cartCount').textContent=cartLines().reduce((a,l)=>a+l.q,0)}
+function renderStore(){renderFilters();renderShelves();renderGrid()}
+function render(){renderShop();renderStore();renderCartCount();if(S.admin)renderAdminBody()}
+
+/* ---------- sheets ---------- */
+function openSheet(html){$('#sheet').innerHTML=html;$('#ov').hidden=false;document.body.style.overflow='hidden';$('#sheet').scrollTop=0}
+function closeSheet(){$('#ov').hidden=true;document.body.style.overflow='';S.editing=null;S.newFiles=[];S.confirmDel=false;S.openId=null}
+$('#ov').addEventListener('click',e=>{if(e.target.id==='ov')closeSheet()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#ov').hidden)closeSheet()});
+
+function stars(n){n=Math.max(1,Math.min(5,Math.round(num(n)||5)));return '★'.repeat(n)+'☆'.repeat(5-n)}
+function openProduct(id){
+  const p=S.products.find(x=>x.id===id);if(!p)return;
+  S.openId=id;
+  S.recent=[id,...S.recent.filter(x=>x!==id)].slice(0,12);lsSet('recent_v1',S.recent);
+  const ph=photosOf(p);const max=maxOf(p);const inCart=S.cart[id]||0;const r=remaining(p);
+  let q=1;
+  const specs=[
+    p.size?['容量',p.size]:null,
+    p.expiry?['保質期',p.expiry]:null,
+    p.releaseDate?['日本發售日',p.releaseDate]:null,
+    num(p.jpPrice)?['日本售價參考',`${yen(p.jpPrice)}（未計運費及稅）`]:null,
+    num(p.maxPerOrder)?['每單限購',`${p.maxPerOrder} 件`]:null,
+    r!=null?['本輪限量',`${p.limitQty} 件，尚餘 ${r} 件`]:null,
+    (p.sold||0)>0?['已預訂',`${p.sold} 件`]:null
+  ].filter(Boolean);
+  const isFav=S.fav.includes(id);
+  const sv=savePct(p);
+  const rel=S.products.filter(x=>x.id!==id&&!isSoldout(x)&&(p.brand&&x.brand===p.brand)).slice(0,6);
+  const relCat=rel.length<3?S.products.filter(x=>x.id!==id&&!isSoldout(x)&&x.category===p.category&&!rel.includes(x)).slice(0,6-rel.length):[];
+  const related=[...rel,...relCat];
+  const reviews=Array.isArray(p.reviews)?p.reviews:[];
+  openSheet(`
+    <div class="sheet-head"><h3>${esc(p.name)}</h3><button class="x" type="button" data-close aria-label="關閉">×</button></div>
+    <div class="gal-main" id="galMain">${img(p,0)}${badges(p)}</div>
+    ${ph.length>1?`<div class="gal-thumbs">${ph.map((x,i)=>`<button type="button" data-gal="${i}" aria-pressed="${i===0}" aria-label="第${i+1}張相片"><img src="/_blob/${esc(x)}" alt="" data-ph="${phChar(p)}"></button>`).join('')}</div>`:''}
+    <div style="margin-top:12px">
+      ${p.brand?`<button type="button" class="cbrand" data-brand="${esc(p.brand)}" style="border:0;background:none;padding:0;text-decoration:underline">${esc(p.brand)}</button>`:''}
+      ${p.jpName?`<div class="cjp" style="white-space:normal">${esc(p.jpName)}</div>`:''}
+    </div>
+    ${(p.award||num(p.cosmeScore))?`<div class="awardline">${p.award?`<span>${esc(p.award)}</span>`:''}${num(p.cosmeScore)?`<span>@cosme 評分 ${num(p.cosmeScore).toFixed(1)}</span>`:''}</div>`:''}
+    ${saleOn(p)?`<div class="salebox">限時特價 ${offPct(p)}% 折扣${p.saleEnds?`，餘 ${left(new Date(p.saleEnds)-Date.now())} 結束`:''}</div>`:''}
+    ${sv>0?`<div class="savebox">香港門市參考價 HK$${money(p.hkPrice)}，在這裏預訂可慳約 ${sv}%</div>`:''}
+    ${specs.length?`<dl class="specs">${specs.map(([a,b])=>`<dt>${a}</dt><dd>${esc(b)}</dd>`).join('')}</dl>`:''}
+    ${(p.concerns||[]).length?`<div class="tagrow">${p.concerns.map(c=>`<button type="button" data-con="${esc(c)}">${esc(c)}</button>`).join('')}</div>`:''}
+    ${p.desc?`<p class="desc">${esc(p.desc)}</p>`:''}
+    <div class="more">
+      ${p.usage?`<details><summary>使用方法</summary><p>${esc(p.usage)}</p></details>`:''}
+      ${p.ingredients?`<details><summary>成分</summary><p>${esc(p.ingredients)}</p></details>`:''}
+      ${reviews.length?`<details open><summary>客人評價（${reviews.length}）</summary>${reviews.map(v=>`<div class="rev"><span class="stars" aria-label="${num(v.stars)||5} 星">${stars(v.stars)}</span> <b>${esc(v.name||'客人')}</b><p>${esc(v.text)}</p></div>`).join('')}</details>`:''}
+    </div>
+    <div class="row" style="margin-top:14px">
+      <div>${priceBlock(p)} <span class="st ${stCls(p)}" style="margin-left:8px">${stText(p)}</span></div>
+      ${isSoldout(p)?'':`<div class="qty"><button type="button" id="qm" aria-label="減少">−</button><span id="qv">1</span><button type="button" id="qp" aria-label="增加">+</button></div>`}
+    </div>
+    ${inCart?`<p class="hint" style="margin-top:6px">預訂清單內已有 ${inCart} 件</p>`:''}
+    <div class="row" style="margin-top:14px;flex-wrap:nowrap">
+      <button class="favbtn" id="favBtn" type="button" aria-pressed="${isFav}" aria-label="${isFav?'取消收藏':'收藏'}">♥</button>
+      <button class="btn" id="shareBtn" type="button" style="padding:9px 14px">分享</button>
+      ${isSoldout(p)
+        ?`<button class="btn" id="askBtn" type="button" style="flex:1;padding:11px">查詢補貨</button>`
+        :`<button class="btn primary" id="addCart" type="button" style="flex:1;padding:11px">加入預訂清單</button>`}
+    </div>
+    ${related.length?`<div class="related"><h4>${rel.length?'同品牌產品':'同類產品'}</h4><div class="rail">${related.map(cardHTML).join('')}</div></div>`:''}
+  `);
+  $('#favBtn').onclick=()=>{const i=S.fav.indexOf(id);if(i>=0)S.fav.splice(i,1);else S.fav.push(id);lsSet('fav_v1',S.fav);
+    const on=S.fav.includes(id);$('#favBtn').setAttribute('aria-pressed',on);toast(on?'已加入收藏':'已取消收藏');renderStore()};
+  $('#shareBtn').onclick=()=>shareProduct(p);
+  $('#sheet').querySelectorAll('[data-gal]').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.gal;$('#galMain').innerHTML=img(p,i)+badges(p);
+    $('#sheet').querySelectorAll('[data-gal]').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+  if(isSoldout(p)){$('#askBtn').onclick=()=>askRestock(p);return}
+  $('#qm').onclick=()=>{q=Math.max(1,q-1);$('#qv').textContent=q};
+  $('#qp').onclick=()=>{if(q+inCart>=max){toast(`此產品每單最多 ${max} 件`);return}q++;$('#qv').textContent=q};
+  $('#addCart').onclick=()=>{
+    const n=Math.min(max,(S.cart[id]||0)+q);
+    if(n===(S.cart[id]||0)){toast(`此產品每單最多 ${max} 件`);return}
+    S.cart[id]=n;saveCart();renderCartCount();closeSheet();toast(`已加入預訂清單：${p.name}`)};
+}
+function shareProduct(p){
+  const st=S.settings||{};
+  const lines=[`【${st.name||'日本藥妝預訂'}】${p.name}`,p.jpName||null,
+    `預訂價：HK$${money(priceOf(p))}${saleOn(p)?`（原價 HK$${money(p.price)}，限時 ${offPct(p)}% 折扣）`:''}`,
+    savePct(p)>0?`香港門市參考價 HK$${money(p.hkPrice)}，慳約 ${savePct(p)}%`:null,
+    p.size?`容量：${p.size}`:null,p.desc?p.desc.split('\n')[0]:null,
+    cutText()?`本輪截單：${cutText()}`:null,
+    st.whatsapp?`WhatsApp 預訂：${st.whatsapp}`:null].filter(Boolean);
+  const txt=lines.join('\n');
+  openSheet(`
+    <div class="sheet-head"><h3>分享產品</h3><button class="x" type="button" data-close aria-label="關閉">×</button></div>
+    <p class="hint" style="margin-bottom:10px">複製以下介紹，貼到 WhatsApp 群組或社交平台。</p>
+    <textarea class="out" id="shTxt" readonly style="min-height:160px;white-space:pre-wrap">${esc(txt)}</textarea>
+    <div class="row" style="margin-top:12px;justify-content:flex-start">
+      <button class="btn primary" id="cpSh" type="button">複製介紹</button>
+      <a class="btn" href="https://wa.me/?text=${encodeURIComponent(txt)}" target="_blank" rel="noopener">以 WhatsApp 分享</a>
+      <button class="btn" type="button" data-open="${esc(p.id)}">返回產品</button>
+    </div>`);
+  $('#cpSh').onclick=()=>copyText(txt,$('#shTxt'));
+}
+function askRestock(p){
+  const st=S.settings||{};const wa=(st.whatsapp||'').replace(/\D/g,'');
+  const txt=`你好，想查詢「${p.name}」幾時會補貨，有貨時請通知我，謝謝。`;
+  openSheet(`
+    <div class="sheet-head"><h3>查詢補貨</h3><button class="x" type="button" data-close aria-label="關閉">×</button></div>
+    <p class="hint" style="margin-bottom:10px">複製以下訊息，以 WhatsApp 傳給我們${st.whatsapp?`（${esc(st.whatsapp)}）`:''}，補貨時我們會通知你。</p>
+    <textarea class="out" id="askTxt" readonly style="min-height:90px;white-space:pre-wrap">${esc(txt)}</textarea>
+    <div class="row" style="margin-top:12px;justify-content:flex-start">
+      <button class="btn primary" id="cpAsk" type="button">複製訊息</button>
+      ${wa?`<a class="btn" href="https://wa.me/${wa}?text=${encodeURIComponent(txt)}" target="_blank" rel="noopener">開啟 WhatsApp</a>`:''}
+    </div>`);
+  $('#cpAsk').onclick=()=>copyText(txt,$('#askTxt'));
+}
+
+function cartLines(){return Object.entries(S.cart).map(([id,q])=>({p:S.products.find(x=>x.id===id),q})).filter(x=>x.p&&x.q>0&&!isSoldout(x.p)).map(l=>({...l,q:Math.min(l.q,maxOf(l.p))}))}
+function openCart(){
+  const lines=cartLines();
+  if(!lines.length){openSheet(`<div class="sheet-head"><h3>預訂清單</h3><button class="x" type="button" data-close aria-label="關閉">×</button></div><div class="empty" style="padding:28px 16px"><strong>清單暫時是空的</strong>在產品頁按「加入預訂清單」，產品就會出現在這裏。</div>`);return}
+  const sub=lines.reduce((a,l)=>a+priceOf(l.p)*l.q,0);
+  const pr=checkPromo(S.promo,sub);
+  const sh=shipping(sub-pr.disc);  // 免運費門檻按折扣後金額計算
+  const total=sub-pr.disc+sh.fee;
+  const closed=cutDate()&&cutDate()<Date.now();
+  openSheet(`
+    <div class="sheet-head"><h3>預訂清單</h3><button class="x" type="button" data-close aria-label="關閉">×</button></div>
+    <div>${lines.map(l=>`
+      <div class="citem"><div class="mini">${img(l.p)}</div>
+        <div class="nm">${esc(l.p.name)}<small>HK$${money(priceOf(l.p))} × ${l.q} ＝ HK$${money(priceOf(l.p)*l.q)}${saleOn(l.p)?' · 特價':''}</small></div>
+        <div class="qty"><button type="button" data-dec="${esc(l.p.id)}" aria-label="減少">−</button><span>${l.q}</span><button type="button" data-inc="${esc(l.p.id)}" aria-label="增加">+</button></div>
+      </div>`).join('')}</div>
+    <div class="sum">
+      <div><span>小計</span><span>HK$${money(sub)}</span></div>
+      ${pr.disc?`<div class="disc"><span>優惠碼 ${esc(pr.code)}（${esc(pr.label)}）</span><span>−HK$${money(pr.disc)}</span></div>`:''}
+      <div><span>運費</span><span>${sh.fee?'HK$'+money(sh.fee):(num(S.settings.shipFee)?'免運費':'另計')}</span></div>
+      ${sh.label?`<p class="hint">${esc(sh.label)}</p>`:''}
+      <div class="tot"><span>合計</span><span>HK$${money(total)}</span></div>
+    </div>
+    ${promoList().length?`<form class="promo" id="promoForm"><input id="promoIn" placeholder="輸入優惠碼" value="${esc(S.promo)}" aria-label="優惠碼"><button class="btn" type="submit">套用</button>${S.promo?'<button class="btn" type="button" id="promoClr">移除</button>':''}</form>${pr.err?`<p class="hint" style="color:var(--bad);margin-top:4px">${esc(pr.err)}</p>`:''}`:''}
+    ${closed?'<p class="notice" style="margin:12px 0">本輪已截單，這張預訂單會撥入下一輪採購。</p>':''}
+    <form class="f" id="orderForm" style="margin-top:14px">
+      <div class="two">
+        <div class="fld"><label for="o-name">稱呼</label><input id="o-name" required autocomplete="name"></div>
+        <div class="fld"><label for="o-phone">聯絡電話</label><input id="o-phone" required inputmode="tel" autocomplete="tel"></div>
+      </div>
+      <div class="fld"><label for="o-pick">取貨方式</label>
+        <select id="o-pick"><option>順豐站或智能櫃自取</option><option>順豐送貨上門</option><option>約定地點面交</option></select></div>
+      <div class="fld"><label for="o-note">備註</label><textarea id="o-note" placeholder="例如：智能櫃編號、如缺貨可否代替同系列產品"></textarea></div>
+      <button class="btn primary" type="submit" style="padding:11px">產生預訂單</button>
+      <p class="hint">預訂單產生後，請複製並以 WhatsApp 傳給我們。確認貨量後才需要付款。</p>
+    </form>
+  `);
+  const d=ls('buyer_v1',{});if(d.n)$('#o-name').value=d.n;if(d.p)$('#o-phone').value=d.p;if(d.k)$('#o-pick').value=d.k;
+  if($('#promoForm')){$('#promoForm').addEventListener('submit',e=>{e.preventDefault();S.promo=$('#promoIn').value.trim().toUpperCase();const r2=checkPromo(S.promo,sub);if(r2.disc)toast('已套用優惠碼');openCart()});
+    if($('#promoClr'))$('#promoClr').onclick=()=>{S.promo='';openCart()}}
+  $('#orderForm').addEventListener('submit',e=>{e.preventDefault();makeOrder(lines,sub,pr,sh.fee)});
+}
+function genCode(){const d=new Date();const p=n=>String(n).padStart(2,'0');
+  const r=Array.from({length:4},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('');
+  return `JD${String(d.getFullYear()).slice(2)}${p(d.getMonth()+1)}${p(d.getDate())}-${r}`}
+function makeOrder(lines,sub,pr,fee){
+  const n=$('#o-name').value.trim(),ph=$('#o-phone').value.trim(),pk=$('#o-pick').value,nt=$('#o-note').value.trim();
+  lsSet('buyer_v1',{n,p:ph,k:pk});
+  const st=S.settings||{};const code=genCode();const ct=cutText();
+  const total=sub-pr.disc+fee;
+  const txt=[`【${st.name||'日本藥妝預訂'}・預訂單】`,`訂單編號：${code}`,ct?`截單輪次：${ct}`:null,'',
+    ...lines.map((l,i)=>`${i+1}. ${l.p.name} × ${l.q}　HK$${money(priceOf(l.p)*l.q)}`),'',
+    `小計：HK$${money(sub)}`,pr.disc?`優惠碼：${pr.code}（-HK$${money(pr.disc)}）`:null,
+    `運費：${fee?'HK$'+money(fee):(num(st.shipFee)?'免運費':'另計')}`,`合計：HK$${money(total)}`,'',
+    `稱呼：${n}`,`電話：${ph}`,`取貨：${pk}`,nt?`備註：${nt.replace(/\n/g,' ')}`:null,'',
+    `產品代碼（請勿修改）：${lines.map(l=>`${l.p.id}*${l.q}@${priceOf(l.p)}`).join(',')}`].filter(x=>x!==null).join('\n');
+  const wa=(st.whatsapp||'').replace(/\D/g,'');
+  const pay=[st.fps?['轉數快（FPS）',st.fps]:null,st.payme?['PayMe',st.payme]:null].filter(Boolean);
+  openSheet(`
+    <div class="sheet-head"><h3>預訂單已產生</h3><button class="x" type="button" data-close aria-label="關閉">×</button></div>
+    <p class="hint" style="margin-bottom:10px">請複製以下內容，以 WhatsApp 傳給我們${st.whatsapp?`（${esc(st.whatsapp)}）`:''}。訂單編號 ${esc(code)}，我們確認貨量後會通知付款。</p>
+    <textarea class="out" id="orderTxt" readonly>${esc(txt)}</textarea>
+    <div class="row" style="margin-top:12px;justify-content:flex-start">
+      <button class="btn primary" id="copyBtn" type="button">複製預訂單</button>
+      ${wa?`<a class="btn" href="https://wa.me/${wa}?text=${encodeURIComponent(txt)}" target="_blank" rel="noopener">開啟 WhatsApp 傳送</a>`:''}
+    </div>
+    ${pay.length?`<div class="pay"><p class="hint" style="margin-bottom:6px">收到確認通知後，可用以下方式付款：</p>${pay.map(([a,b])=>`<div><span>${a}：<b>${esc(b)}</b></span><button class="btn sm" type="button" data-copy="${esc(b)}">複製</button></div>`).join('')}</div>`:''}
+    <button class="btn" id="clearCart" type="button" style="width:100%;margin-top:14px">已傳送，清空預訂清單</button>
+  `);
+  $('#copyBtn').onclick=()=>copyText(txt,$('#orderTxt'));
+  $('#clearCart').onclick=()=>{S.cart={};S.promo='';saveCart();renderCartCount();closeSheet();toast('預訂清單已清空')};
+}
+
+/* ---------- admin ---------- */
+function costOf(id){const c=S.costs[id];if(!c)return null;const rate=num(S.config.rate)||0.052;if(!c.jpy&&!c.extra)return null;return Number(c.jpy||0)*rate+Number(c.extra||0)}
+function marginCls(m){return m>=0.5?'m-good':m>=0.25?'m-warn':'m-bad'}
+function renderAdminPanel(){
+  const pend=S.orders.filter(o=>o.status==='pending').length;
+  const tabs=[['products','產品'],['orders','訂單'+(pend?` <span class="count">${pend}</span>`:'')],['purchase','採購清單'],['features','專題'],['settings','店舖設定']];
+  $('#adminPanel').innerHTML=`<div class="admin"><nav class="tabs" aria-label="管理分頁">${tabs.map(([k,t])=>`<button class="tab" type="button" data-tab="${k}" aria-pressed="${S.tab===k}">${t}</button>`).join('')}</nav><div id="admBody"></div></div>`;
+  renderAdminBody();
+}
+function renderAdminBody(){
+  const b=$('#admBody');if(!b)return;
+  if(S.tab==='settings'){if(!S.settingsDirty||!$('#setForm'))renderSettings(b);return}
+  if(S.tab==='products')renderAdmProducts(b);
+  else if(S.tab==='orders')renderOrders(b);
+  else if(S.tab==='purchase')renderPurchase(b);
+  else if(S.tab==='features')renderFeatures(b);
+}
+function promosToText(){return promoList().map(p=>[p.code,p.type==='pct'?p.value+'%':p.value,p.min??'',p.expires||''].join('｜')).join('\n')}
+function parsePromos(t){
+  return t.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const [code,val,min,exp]=l.split(/[|｜]/).map(s=>(s||'').trim());
+    if(!code||!val)return null;const pct=val.endsWith('%');const v=num(val.replace('%',''));if(v==null)return null;
+    return {code:code.toUpperCase(),type:pct?'pct':'amt',value:v,min:num(min),expires:/^\d{4}-\d{2}-\d{2}$/.test(exp||'')?exp:''}}).filter(Boolean);
+}
+function renderSettings(b){
+  const st=S.settings||{};
+  b.innerHTML=`<h2>店舖設定</h2><p class="hint" style="margin-bottom:12px">這些資料會顯示在網店及預訂單上。匯率只有管理人員看得到，用來計算成本。</p>
+    <form class="f" id="setForm">
+      <div class="two">
+        <div class="fld"><label for="s-name">店名</label><input id="s-name" value="${esc(st.name||'')}" placeholder="日本藥妝預訂"></div>
+        <div class="fld"><label for="s-wa">WhatsApp 號碼</label><input id="s-wa" value="${esc(st.whatsapp||'')}" placeholder="852 9123 4567" inputmode="tel"></div>
+      </div>
+      <div class="fld"><label for="s-tag">簡介</label><input id="s-tag" value="${esc(st.tagline||'')}"></div>
+      <div class="fld"><label for="s-ann">頂部公告（留空即不顯示）</label><input id="s-ann" value="${esc(st.announcement||'')}" placeholder="例如：新客輸入 WELCOME10 即減一成"></div>
+      <div class="two">
+        <div class="fld"><label for="s-cut">本輪截單時間</label><input id="s-cut" type="datetime-local" value="${esc(st.cutoffAt||'')}"></div>
+        <div class="fld"><label for="s-eta">預計到港</label><input id="s-eta" value="${esc(st.eta||'')}" placeholder="11月中旬"></div>
+      </div>
+      <div class="two">
+        <div class="fld"><label for="s-fee">每單運費（港元）</label><input id="s-fee" inputmode="decimal" value="${esc(st.shipFee??'')}" placeholder="留空即另計"></div>
+        <div class="fld"><label for="s-free">免運費門檻（港元）</label><input id="s-free" inputmode="decimal" value="${esc(st.freeShip??'')}" placeholder="例如 400"></div>
+      </div>
+      <div class="two">
+        <div class="fld"><label for="s-fps">轉數快（FPS）識別碼或電話</label><input id="s-fps" value="${esc(st.fps||'')}"></div>
+        <div class="fld"><label for="s-payme">PayMe 連結或名稱</label><input id="s-payme" value="${esc(st.payme||'')}"></div>
+      </div>
+      <div class="fld"><label for="s-promo">優惠碼（每行一個：代碼｜折扣｜最低消費｜到期日）</label>
+        <textarea id="s-promo" placeholder="WELCOME10｜10%｜300｜2026-12-31&#10;SAVE20｜20｜200｜">${esc(promosToText())}</textarea>
+        <p class="hint">折扣寫 10% 代表九折，寫 20 代表減 HK$20。最低消費和到期日可以留空。優惠碼存放在網店的公開資料內，懂技術的訪客有機會讀到，所以不要放只給個別客人的優惠。</p></div>
+      <div class="fld"><label for="s-ret">退換政策</label><textarea id="s-ret">${esc(st.returns||DEF_RETURNS)}</textarea></div>
+      <div class="two">
+        <div class="fld"><label for="s-rate">匯率（1 円 ＝ 港元）</label><input id="s-rate" value="${esc(S.config.rate??'0.052')}" inputmode="decimal"></div>
+        <div class="fld" style="align-self:end"><button class="btn primary" type="submit" style="padding:10px">儲存設定</button></div>
+      </div>
+    </form>`;
+  $('#setForm').addEventListener('input',()=>S.settingsDirty=true);
+  $('#setForm').addEventListener('submit',saveSettings);
+}
+async function saveSettings(e){
+  e.preventDefault();
+  const data={name:$('#s-name').value.trim(),whatsapp:$('#s-wa').value.trim(),tagline:$('#s-tag').value.trim(),announcement:$('#s-ann').value.trim(),
+    cutoffAt:$('#s-cut').value,eta:$('#s-eta').value.trim(),shipFee:num($('#s-fee').value),freeShip:num($('#s-free').value),
+    fps:$('#s-fps').value.trim(),payme:$('#s-payme').value.trim(),returns:$('#s-ret').value.trim(),promos:parsePromos($('#s-promo').value)};
+  const rate=num($('#s-rate').value);
+  try{
+    await S.db.doc('shop/settings').set(data);
+    if(rate!=null)await S.db.doc('data/admin/config/main').set({rate});
+    S.settingsDirty=false;toast(`設定已儲存，共 ${data.promos.length} 個優惠碼`);
+  }catch(err){toast('未能儲存，請確認你有編輯權限後再試')}
+}
+function renderAdmProducts(b){
+  b.innerHTML=`<div class="row"><div><h2>產品管理</h2><p class="hint">成本及毛利只在管理介面顯示，客人看不到。毛利按現時售價（包括特價）計算。</p></div>
+    <button class="btn primary" id="newProd" type="button">＋ 上架新產品</button></div>
+    <div class="tbl" style="margin-top:12px">${S.products.length?`<table><thead><tr><th>產品</th><th>狀態</th><th class="num">售價</th><th class="num">成本</th><th class="num">毛利</th><th class="num">已預訂</th><th></th></tr></thead><tbody>${
+    S.products.map(p=>{const c=costOf(p.id);const pr=priceOf(p);const m=c!=null&&pr?(pr-c)/pr:null;const r=remaining(p);
+      return `<tr><td>${esc(p.name)}${p.example?' <span class="badge eg">示例</span>':''}${saleOn(p)?' <span class="badge sale">特價</span>':''}<br><span class="hint">${esc(p.category||'')}${p.brand?' · '+esc(p.brand):''}</span></td><td>${stText(p)}${r!=null?`<br><span class="hint">尚餘 ${r}</span>`:''}</td>
+      <td class="num">HK$${money(pr)}${saleOn(p)?`<br><span class="hint" style="text-decoration:line-through">HK$${money(p.price)}</span>`:''}</td><td class="num">${c!=null?'HK$'+money(c):'未填'}</td>
+      <td class="num">${m!=null?`<span class="${marginCls(m)}">${Math.round(m*100)}%</span>`:'未填'}</td>
+      <td class="num">${p.sold||0}</td>
+      <td><button class="btn sm" type="button" data-edit="${esc(p.id)}">編輯</button></td></tr>`}).join('')}</tbody></table>`:'<p class="hint">未有產品。按「上架新產品」開始。</p>'}</div>`;
+  $('#newProd').onclick=()=>openEditor(null);
+}
+
+/* orders */
+function parseOrder(txt){
+  const get=k=>{const m=txt.match(new RegExp('^\\s*'+k+'[^：:\\n]*[：:]\\s*(.*)$','m'));return m?m[1].trim():''};
+  const codeLine=get('產品代碼');
+  if(!codeLine)return {error:'找不到「產品代碼」一行。請貼上客人傳來的完整預訂單，包括最後一行。'};
+  const items=[],missing=[];
+  codeLine.split(/[,，]/).forEach(s=>{const m=s.trim().match(/^([A-Za-z0-9_\-]+)\*(\d+)(?:@([\d.]+))?$/);if(!m)return;
+    const p=S.products.find(x=>x.id===m[1]);if(!p){missing.push(m[1]);return}
+    const price=m[3]!=null?num(m[3]):priceOf(p);
+    items.push({id:p.id,name:p.name,jpName:p.jpName||'',price,qty:+m[2]})});
+  if(!items.length)return {error:'預訂單內的產品已不在網店，無法入單。'};
+  const sub=items.reduce((a,i)=>a+i.price*i.qty,0);
+  const shm=get('運費');const fee=shm.includes('HK$')?(num(shm.replace(/[^\d.]/g,''))||0):0;
+  const pm=get('優惠碼');let promo='',disc=0;
+  if(pm){const mm=pm.match(/^([A-Za-z0-9_\-]+).*?HK\$([\d,.]+)/);if(mm){promo=mm[1];disc=num(mm[2].replace(/,/g,''))||0}}
+  return {code:get('訂單編號')||genCode(),round:get('截單輪次'),name:get('稱呼'),phone:get('電話'),pickup:get('取貨'),note:get('備註'),items,missing,subtotal:sub,promo,discount:disc,ship:fee,total:sub-disc+fee};
+}
+function orderProfit(o){let pr=0,known=true;o.items.forEach(i=>{const c=costOf(i.id);if(c==null)known=false;else pr+=(i.price-c)*i.qty});return known?pr-(o.discount||0):null}
+function renderOrders(b){
+  const live=S.orders.filter(o=>o.status!=='cancelled');
+  const rev=live.reduce((a,o)=>a+(o.total||0),0);
+  const unpaid=S.orders.filter(o=>o.status==='pending'||o.status==='confirmed').reduce((a,o)=>a+(o.total||0),0);
+  let prof=0,pk=true;live.forEach(o=>{const p=orderProfit(o);if(p==null)pk=false;else prof+=p});
+  const list=S.orders.filter(o=>S.ofilter==='all'||o.status===S.ofilter);
+  const keep=$('#pasteTxt')?$('#pasteTxt').value:'';
+  b.innerHTML=`<h2>訂單</h2><p class="hint">客人以 WhatsApp 傳來預訂單後，把整段訊息貼在下面，按「入單」即可記錄。</p>
+    <form class="f" id="pasteForm" style="margin-top:12px">
+      <div class="fld"><label for="pasteTxt">貼上預訂單</label><textarea id="pasteTxt" placeholder="【日本藥妝預訂・預訂單】…"></textarea></div>
+      <div class="row"><span class="hint" id="pasteMsg"></span><button class="btn primary" type="submit">入單</button></div>
+    </form>
+    <div class="kpis">
+      <div class="kpi"><small>有效訂單</small><b>${live.length}</b></div>
+      <div class="kpi"><small>訂單總額</small><b>HK$${money(rev)}</b></div>
+      <div class="kpi"><small>未收款</small><b>HK$${money(unpaid)}</b></div>
+      <div class="kpi"><small>預計毛利</small><b>${pk?'HK$'+money(prof):'部分成本未填'}</b></div>
+    </div>
+    <nav class="chips" aria-label="訂單狀態" style="padding-top:0">${[['all','全部'],...Object.entries(OST)].map(([k,t])=>{const n=k==='all'?S.orders.length:S.orders.filter(o=>o.status===k).length;return `<button class="chip" type="button" data-of="${k}" aria-pressed="${S.ofilter===k}">${t} ${n}</button>`}).join('')}</nav>
+    <div class="olist">${list.length?list.map(o=>`
+      <div class="ocard">
+        <div class="top"><span class="code">${esc(o.code)}</span><span class="pill s-${esc(o.status)}">${OST[o.status]||''}</span></div>
+        <div class="meta">${esc(o.name)} · ${esc(o.phone)} · ${esc(o.pickup)}${o.round?` · ${esc(o.round)}`:''}</div>
+        <div class="items">${o.items.map(i=>`${esc(i.name)} × ${i.qty}`).join('、')}</div>
+        ${o.promo?`<div class="meta">優惠碼 ${esc(o.promo)}，減 HK$${money(o.discount)}</div>`:''}
+        ${o.note?`<div class="meta">備註：${esc(o.note)}</div>`:''}
+        <div class="foot"><b style="font-variant-numeric:tabular-nums">HK$${money(o.total)}</b>
+          <span class="row" style="gap:6px">
+            <select data-ost="${esc(o.code)}" aria-label="更改狀態">${Object.entries(OST).map(([k,t])=>`<option value="${k}" ${k===o.status?'selected':''}>${t}</option>`).join('')}</select>
+            <button class="btn sm" type="button" data-omsg="${esc(o.code)}">通知訊息</button>
+            <button class="btn sm danger" type="button" data-odel="${esc(o.code)}">刪除</button>
+          </span></div>
+      </div>`).join(''):'<div class="empty"><strong>未有訂單</strong>貼上第一張預訂單後，訂單會出現在這裏。</div>'}</div>`;
+  $('#pasteTxt').value=keep;
+  $('#pasteForm').addEventListener('submit',e=>{e.preventDefault();previewOrder()});
+}
+function previewOrder(){
+  const r=parseOrder($('#pasteTxt').value);
+  if(r.error){$('#pasteMsg').textContent=r.error;return}
+  if(S.orders.some(o=>o.code===r.code)){$('#pasteMsg').textContent=`訂單 ${r.code} 已經入過單。`;return}
+  S.parsed=r;
+  openSheet(`
+    <div class="sheet-head"><h3>確認入單 ${esc(r.code)}</h3><button class="x" type="button" data-close aria-label="關閉">×</button></div>
+    <div class="hint">${esc(r.name)} · ${esc(r.phone)} · ${esc(r.pickup)}</div>
+    ${r.items.map(i=>`<div class="citem" style="grid-template-columns:1fr auto"><div class="nm">${esc(i.name)}<small>HK$${money(i.price)} × ${i.qty}</small></div><b>HK$${money(i.price*i.qty)}</b></div>`).join('')}
+    ${r.missing.length?`<p class="notice">有 ${r.missing.length} 件產品已從網店刪除，未有計入。</p>`:''}
+    <div class="sum"><div><span>小計</span><span>HK$${money(r.subtotal)}</span></div>${r.discount?`<div class="disc"><span>優惠碼 ${esc(r.promo)}</span><span>−HK$${money(r.discount)}</span></div>`:''}<div><span>運費</span><span>HK$${money(r.ship)}</span></div><div class="tot"><span>合計</span><span>HK$${money(r.total)}</span></div></div>
+    <p class="hint">價錢以客人落單時的價錢計算。入單後，產品的已預訂件數會自動更新。</p>
+    <button class="btn primary" id="saveOrder" type="button" style="width:100%;margin-top:12px;padding:11px">確認入單</button>`);
+  $('#saveOrder').onclick=saveOrder;
+}
+async function adjustSold(items,sign){
+  for(const i of items){const p=S.products.find(x=>x.id===i.id);if(!p)continue;
+    const v=Math.max(0,(p.sold||0)+sign*i.qty);
+    try{await S.db.doc('products/'+p.id).update({sold:v});p.sold=v}catch(e){}}
+}
+async function saveOrder(){
+  const r=S.parsed;if(!r)return;const btn=$('#saveOrder');btn.disabled=true;btn.textContent='入單中…';
+  try{
+    const o={code:r.code,round:r.round,name:r.name,phone:r.phone,pickup:r.pickup,note:r.note,items:r.items,subtotal:r.subtotal,promo:r.promo,discount:r.discount,ship:r.ship,total:r.total,status:'pending',createdAt:Date.now()};
+    await S.db.doc('data/admin/orders/'+r.code).set(o);
+    await adjustSold(r.items,1);
+    S.parsed=null;closeSheet();if($('#pasteTxt'))$('#pasteTxt').value='';toast(`訂單 ${r.code} 已入單`);
+  }catch(e){btn.disabled=false;btn.textContent='再試一次';toast('未能入單，請稍後再試')}
+}
+async function setOrderStatus(code,st){
+  const o=S.orders.find(x=>x.code===code);if(!o||o.status===st)return;
+  const was=o.status;
+  try{
+    await S.db.doc('data/admin/orders/'+code).update({status:st});
+    if(was!=='cancelled'&&st==='cancelled')await adjustSold(o.items,-1);
+    if(was==='cancelled'&&st!=='cancelled')await adjustSold(o.items,1);
+    toast(`${code} 已改為${OST[st]}`);
+  }catch(e){toast('未能更新狀態，請稍後再試');renderAdminBody()}
+}
+function orderMsg(code){
+  const o=S.orders.find(x=>x.code===code);if(!o)return;const st=S.settings||{};
+  const pay=[st.fps?`轉數快（FPS）：${st.fps}`:null,st.payme?`PayMe：${st.payme}`:null].filter(Boolean);
+  const head=`${o.name}你好，這是${st.name||'我們'}的通知。訂單編號 ${o.code}`;
+  const t={
+    pending:`${head}，我們已收到你的預訂單，正在確認貨量，稍後會再通知你。`,
+    confirmed:`${head}，所有產品已確認，合計 HK$${money(o.total)}。${pay.length?'請以下列方式付款，並傳送付款紀錄：\n'+pay.join('\n'):'請回覆以安排付款。'}`,
+    paid:`${head}，已收到你的款項 HK$${money(o.total)}，謝謝！貨品到港後會再通知你。`,
+    arrived:`${head}，你的貨品已經到港，我們會盡快以「${o.pickup}」安排，屆時再通知取貨詳情。`,
+    done:`${head}，多謝光顧！如對產品有任何意見，歡迎回覆分享，我們會參考作為客人評價。`,
+    cancelled:`${head}，你的訂單已取消，如已付款我們會盡快退回款項。`
+  }[o.status];
+  const wa=String(o.phone||'').replace(/\D/g,'');const waNum=wa.length===8?'852'+wa:wa;
+  openSheet(`
+    <div class="sheet-head"><h3>通知客人：${OST[o.status]}</h3><button class="x" type="button" data-close aria-label="關閉">×</button></div>
+    <textarea class="out" id="msgTxt" style="min-height:140px;white-space:pre-wrap">${esc(t)}</textarea>
+    <div class="row" style="margin-top:12px;justify-content:flex-start">
+      <button class="btn primary" id="cpMsg" type="button">複製訊息</button>
+      ${waNum?`<a class="btn" href="https://wa.me/${waNum}?text=${encodeURIComponent(t)}" target="_blank" rel="noopener">以 WhatsApp 傳給客人</a>`:''}
+    </div>`);
+  $('#cpMsg').onclick=()=>copyText($('#msgTxt').value,$('#msgTxt'));
+}
+async function deleteOrder(code,btn){
+  if(btn.dataset.sure!=='1'){btn.dataset.sure='1';btn.textContent='確認刪除';setTimeout(()=>{if(btn.isConnected){btn.dataset.sure='';btn.textContent='刪除'}},4000);return}
+  const o=S.orders.find(x=>x.code===code);if(!o)return;
+  try{await S.db.doc('data/admin/orders/'+code).delete();if(o.status!=='cancelled')await adjustSold(o.items,-1);toast('訂單已刪除')}catch(e){toast('未能刪除，請稍後再試')}
+}
+
+/* purchase list */
+function purchaseRows(){
+  const ok=S.paidOnly?['paid']:['pending','confirmed','paid'];
+  const map={};
+  S.orders.filter(o=>ok.includes(o.status)).forEach(o=>o.items.forEach(i=>{
+    const p=S.products.find(x=>x.id===i.id);
+    const k=i.id;map[k]=map[k]||{id:k,name:p?.name||i.name,jpName:p?.jpName||i.jpName||'',brand:p?.brand||'',qty:0,orders:0};
+    map[k].qty+=i.qty;map[k].orders++}));
+  return Object.values(map).sort((a,b)=>b.qty-a.qty);
+}
+function renderPurchase(b){
+  const rows=purchaseRows();
+  let jpyTotal=0,known=true;
+  rows.forEach(r=>{const c=S.costs[r.id];if(c&&c.jpy)jpyTotal+=c.jpy*r.qty;else known=false});
+  b.innerHTML=`<div class="row"><div><h2>採購清單</h2><p class="hint">把所有未到港訂單的產品合併計算，直接複製給日本買手。</p></div>
+    <button class="btn primary" id="cpBuy" type="button" ${rows.length?'':'disabled'}>複製給買手</button></div>
+    <label class="check" style="margin-top:10px"><input type="checkbox" id="paidOnly" ${S.paidOnly?'checked':''}> 只計算已付款訂單</label>
+    <div class="kpis"><div class="kpi"><small>產品款數</small><b>${rows.length}</b></div><div class="kpi"><small>總件數</small><b>${rows.reduce((a,r)=>a+r.qty,0)}</b></div>
+    <div class="kpi"><small>預計採購金額</small><b>${yen(jpyTotal)}${known?'':' 起'}</b></div></div>
+    <div class="tbl">${rows.length?`<table><thead><tr><th>產品</th><th>日文名稱</th><th class="num">件數</th><th class="num">訂單數</th><th class="num">日本買入價</th></tr></thead><tbody>${
+      rows.map(r=>{const c=S.costs[r.id];return `<tr><td>${esc(r.name)}</td><td>${esc(r.jpName)}</td><td class="num"><b>${r.qty}</b></td><td class="num">${r.orders}</td><td class="num">${c&&c.jpy?yen(c.jpy):'未填'}</td></tr>`}).join('')}</tbody></table>`
+      :'<div class="empty"><strong>未有需要採購的產品</strong>入單後，待確認、已確認和已付款訂單的產品會自動合併在這裏。</div>'}</div>`;
+  $('#paidOnly').onchange=e=>{S.paidOnly=e.target.checked;renderAdminBody()};
+  $('#cpBuy').onclick=()=>{
+    const t=[`【採購清單】${cutText()?'截單輪次：'+cutText():''}`.trim(),'',...rows.map((r,i)=>`${i+1}. ${r.jpName||r.name}${r.brand?'（'+r.brand+'）':''}\n   中文：${r.name}\n   數量：${r.qty}`),'',`合共 ${rows.length} 款，${rows.reduce((a,r)=>a+r.qty,0)} 件`].join('\n');
+    copyText(t,null)};
+}
+
+/* features */
+function renderFeatures(b){
+  const fs=S.features.slice().sort((a,c)=>(a.order||0)-(c.order||0));
+  b.innerHTML=`<div class="row"><div><h2>專題精選</h2><p class="hint">在首頁顯示的產品專題，例如「秋冬保濕」「新品速遞」「買手推介」。數字小的排在前面。</p></div>
+    <button class="btn primary" id="newFeat" type="button">＋ 新增專題</button></div>
+    <div class="flist">${fs.length?fs.map(f=>`<div class="fcard"><div><b>${esc(f.title)}</b><span class="hint">排序 ${f.order||0} · ${(f.productIds||[]).length} 件產品${f.desc?' · '+esc(f.desc):''}</span></div>
+      <button class="btn sm" type="button" data-fedit="${esc(f.id)}">編輯</button></div>`).join(''):'<div class="empty"><strong>未有專題</strong>新增專題後，會以橫向貨架顯示在首頁。</div>'}</div>`;
+  $('#newFeat').onclick=()=>openFeatureEditor(null);
+}
+function openFeatureEditor(id){
+  const f=id?S.features.find(x=>x.id===id):null;
+  const sel=new Set(f?.productIds||[]);let sure=false;
+  openSheet(`
+    <div class="sheet-head"><h3>${f?'編輯專題':'新增專題'}</h3><button class="x" type="button" data-close aria-label="關閉">×</button></div>
+    <form class="f" id="fForm">
+      <div class="fld"><label for="f-title">專題名稱</label><input id="f-title" required value="${esc(f?.title||'')}" placeholder="秋冬保濕特輯"></div>
+      <div class="fld"><label for="f-desc">簡介</label><input id="f-desc" value="${esc(f?.desc||'')}" placeholder="天氣轉乾，買手精選的保濕好物"></div>
+      <div class="fld"><label for="f-order">排序</label><input id="f-order" inputmode="numeric" value="${esc(f?.order??(S.features.length+1))}"></div>
+      <div class="fld"><span class="lbl">選擇產品</span><div class="picklist">${S.products.map(p=>`<label><input type="checkbox" value="${esc(p.id)}" ${sel.has(p.id)?'checked':''}> ${esc(p.name)}</label>`).join('')}</div></div>
+      <div class="row">${f?'<button class="btn danger" type="button" id="fDel">刪除專題</button>':'<span></span>'}<button class="btn primary" type="submit">儲存專題</button></div>
+    </form>`);
+  $('#fForm').addEventListener('submit',async e=>{e.preventDefault();
+    const ids=[...$('#sheet').querySelectorAll('.picklist input:checked')].map(i=>i.value);
+    const data={title:$('#f-title').value.trim(),desc:$('#f-desc').value.trim(),order:num($('#f-order').value)||0,productIds:ids};
+    if(!data.title){toast('請填寫專題名稱');return}
+    try{await S.db.doc('features/'+(id||S.db.collection('features').doc().id)).set(data);closeSheet();toast('專題已儲存')}catch(err){toast('未能儲存，請稍後再試')}});
+  if(f)$('#fDel').onclick=async()=>{if(!sure){sure=true;$('#fDel').textContent='再按一次確認刪除';return}
+    try{await S.db.doc('features/'+id).delete();closeSheet();toast('專題已刪除')}catch(err){toast('未能刪除，請稍後再試')}};
+}
+
+/* product editor */
+function reviewsToText(rs){return (rs||[]).map(r=>[r.name||'',r.stars||5,r.text||''].join('｜')).join('\n')}
+function parseReviews(t){return t.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const parts=l.split(/[|｜]/);
+  if(parts.length<3)return {name:'客人',stars:5,text:l};return {name:parts[0].trim()||'客人',stars:Math.max(1,Math.min(5,num(parts[1])||5)),text:parts.slice(2).join('｜').trim()}}).filter(r=>r.text)}
+function openEditor(id){
+  const p=id?S.products.find(x=>x.id===id):null;
+  const c=id?(S.costs[id]||{}):{};
+  S.editing=id;S.newFiles=[];S.confirmDel=false;S.editPhotos=p?photosOf(p).slice():[];
+  const opt=(o,v)=>Object.entries(o).map(([k,t])=>`<option value="${esc(k)}" ${k===(v??'')?'selected':''}>${esc(t)}</option>`).join('');
+  const con=new Set(p?.concerns||[]);
+  openSheet(`
+    <div class="sheet-head"><h3>${p?'編輯產品':'上架新產品'}</h3><button class="x" type="button" data-close aria-label="關閉">×</button></div>
+    <form class="f" id="pForm">
+      <div class="fld"><span class="lbl">產品相片（最多 5 張，第一張為封面）</span><div class="photos" id="pPhotos"></div><p class="hint">建議用買手在店內拍的實物相，系統會自動壓縮。</p></div>
+      <fieldset class="grp"><legend>基本資料</legend>
+        <div class="fld"><label for="p-name">產品名稱（中文）</label><input id="p-name" required value="${esc(p?.name||'')}" placeholder="肌研極潤玻尿酸化妝水"></div>
+        <div class="fld"><label for="p-jp">日文名稱</label><input id="p-jp" value="${esc(p?.jpName||'')}" placeholder="肌ラボ 極潤ヒアルロン液"></div>
+        <div class="two">
+          <div class="fld"><label for="p-brand">品牌</label><input id="p-brand" value="${esc(p?.brand||'')}" list="brandList"><datalist id="brandList">${[...new Set(S.products.map(x=>x.brand).filter(Boolean))].map(b=>`<option value="${esc(b)}">`).join('')}</datalist></div>
+          <div class="fld"><label for="p-cat">分類</label><select id="p-cat">${opt(Object.fromEntries(CATS.map(x=>[x,x])),p?.category||'護膚')}</select></div>
+        </div>
+        <div class="two">
+          <div class="fld"><label for="p-status">狀態</label><select id="p-status">${opt(STATUS,p?.status||'preorder')}</select></div>
+          <div class="fld"><label for="p-tag">標籤</label><select id="p-tag">${opt(TAGS,p?.tag||'')}</select></div>
+        </div>
+        <div class="fld"><span class="lbl">適合需要（客人可按這些篩選）</span><div class="checks">${CONCERNS.map(x=>`<label><input type="checkbox" name="con" value="${x}" ${con.has(x)?'checked':''}> ${x}</label>`).join('')}</div></div>
+      </fieldset>
+      <fieldset class="grp"><legend>價錢及數量</legend>
+        <div class="two">
+          <div class="fld"><label for="p-price">售價（港元）</label><input id="p-price" required inputmode="decimal" value="${esc(p?.price??'')}"></div>
+          <div class="fld"><label for="p-hk">香港門市參考價（港元）</label><input id="p-hk" inputmode="decimal" value="${esc(p?.hkPrice??'')}" placeholder="顯示可慳幾多"></div>
+        </div>
+        <div class="two">
+          <div class="fld"><label for="p-sale">限時特價（港元）</label><input id="p-sale" inputmode="decimal" value="${esc(p?.salePrice??'')}" placeholder="留空即無特價"></div>
+          <div class="fld"><label for="p-saleend">特價結束時間</label><input id="p-saleend" type="datetime-local" value="${esc(p?.saleEnds||'')}"></div>
+        </div>
+        <div class="three">
+          <div class="fld"><label for="p-limit">本輪限量</label><input id="p-limit" inputmode="numeric" value="${esc(p?.limitQty??'')}" placeholder="不限"></div>
+          <div class="fld"><label for="p-max">每單限購</label><input id="p-max" inputmode="numeric" value="${esc(p?.maxPerOrder??'')}" placeholder="不限"></div>
+          <div class="fld"><label for="p-jpp">日本售價參考（円）</label><input id="p-jpp" inputmode="numeric" value="${esc(p?.jpPrice??'')}" placeholder="顯示給客人"></div>
+        </div>
+        <p class="hint">限量件數會減去已預訂件數，賣完自動顯示售罄。</p>
+      </fieldset>
+      <fieldset class="grp"><legend>產品資料</legend>
+        <div class="three">
+          <div class="fld"><label for="p-size">容量</label><input id="p-size" value="${esc(p?.size||'')}" placeholder="170ml"></div>
+          <div class="fld"><label for="p-exp">保質期</label><input id="p-exp" value="${esc(p?.expiry||'')}" placeholder="開封後12個月"></div>
+          <div class="fld"><label for="p-rel">日本發售日</label><input id="p-rel" value="${esc(p?.releaseDate||'')}" placeholder="2026年11月1日"></div>
+        </div>
+        <div class="two">
+          <div class="fld"><label for="p-award">得獎紀錄</label><input id="p-award" value="${esc(p?.award||'')}" placeholder="@cosme 2026 上半年最佳化妝水第1位"></div>
+          <div class="fld"><label for="p-cosme">@cosme 評分（滿分 7）</label><input id="p-cosme" inputmode="decimal" value="${esc(p?.cosmeScore??'')}"></div>
+        </div>
+        <div class="fld"><label for="p-desc">產品介紹</label><textarea id="p-desc" placeholder="用途、適合膚質、日本人氣等">${esc(p?.desc||'')}</textarea></div>
+        <div class="fld"><label for="p-usage">使用方法</label><textarea id="p-usage">${esc(p?.usage||'')}</textarea></div>
+        <div class="fld"><label for="p-ing">成分</label><textarea id="p-ing">${esc(p?.ingredients||'')}</textarea></div>
+        <div class="fld"><label for="p-rev">客人評價（每行一則：稱呼｜星數｜內容）</label><textarea id="p-rev" placeholder="陳小姐｜5｜用了兩星期，皮膚明顯沒那麼乾">${esc(reviewsToText(p?.reviews))}</textarea><p class="hint">只放真實客人的回饋，例如客人在 WhatsApp 傳來的意見。</p></div>
+      </fieldset>
+      <fieldset class="grp"><legend>成本（只有管理人員看到）</legend>
+        <div class="two">
+          <div class="fld"><label for="p-jpy">實際買入價（円）</label><input id="p-jpy" inputmode="numeric" value="${esc(c.jpy??'')}"></div>
+          <div class="fld"><label for="p-extra">運費及雜費（港元／件）</label><input id="p-extra" inputmode="decimal" value="${esc(c.extra??'')}"></div>
+        </div>
+        <div class="calc" id="pCalc"></div>
+      </fieldset>
+      <div class="row">
+        ${p?'<button class="btn danger" type="button" id="pDel">刪除產品</button>':'<span></span>'}
+        <button class="btn primary" type="submit" id="pSave" style="padding:10px 20px">${p?'儲存修改':'上架'}</button>
+      </div>
+    </form>
+  `);
+  renderPhotoPicker();
+  const calc=()=>{const rate=num(S.config.rate)||0.052;const jpy=num($('#p-jpy').value)||0,ex=num($('#p-extra').value)||0;
+    const base=num($('#p-price').value)||0,sp=num($('#p-sale').value);const pr=sp!=null&&sp<base?sp:base;
+    const cost=jpy*rate+ex;
+    $('#pCalc').innerHTML=jpy||ex?`<span>到港成本 <b>HK$${money(cost)}</b></span><span>每件毛利 <b>HK$${money(pr-cost)}</b></span><span>毛利率 <b>${pr?Math.round((pr-cost)/pr*100):0}%</b></span><span>售價為成本 <b>${cost?(pr/cost).toFixed(1):'0'} 倍</b></span>${sp!=null&&sp<base?'<span>（按特價計算）</span>':''}`:'<span>填入實際買入價，即可看到到港成本和毛利。</span>'};
+  ['p-jpy','p-extra','p-price','p-sale'].forEach(i=>$('#'+i).addEventListener('input',calc));calc();
+  $('#pForm').addEventListener('submit',saveProduct);
+  if(p)$('#pDel').onclick=()=>{if(!S.confirmDel){S.confirmDel=true;$('#pDel').textContent='再按一次確認刪除';return}deleteProduct(p)};
+}
+function renderPhotoPicker(){
+  const el=$('#pPhotos');if(!el)return;
+  const total=S.editPhotos.length+S.newFiles.length;
+  el.innerHTML=S.editPhotos.map((id,i)=>`<div class="pv"><img src="/_blob/${esc(id)}" alt="" data-ph="相">${i===0?'<span class="cv">封面</span>':''}<button type="button" data-rmold="${i}" aria-label="移除相片">×</button></div>`).join('')
+    +S.newFiles.map((f,i)=>`<div class="pv"><img src="${f.url}" alt="">${S.editPhotos.length+i===0?'<span class="cv">封面</span>':''}<button type="button" data-rmnew="${i}" aria-label="移除相片">×</button></div>`).join('')
+    +(total<5?`<label class="addph">＋ 加相<input type="file" id="p-photo" accept="image/jpeg,image/png,image/webp" multiple></label>`:'');
+  el.querySelectorAll('[data-rmold]').forEach(b=>b.onclick=()=>{S.editPhotos.splice(+b.dataset.rmold,1);renderPhotoPicker()});
+  el.querySelectorAll('[data-rmnew]').forEach(b=>b.onclick=()=>{S.newFiles.splice(+b.dataset.rmnew,1);renderPhotoPicker()});
+  const inp=$('#p-photo');if(inp)inp.onchange=e=>{
+    const room=5-S.editPhotos.length-S.newFiles.length;
+    [...e.target.files].slice(0,room).forEach(f=>S.newFiles.push({file:f,url:URL.createObjectURL(f)}));renderPhotoPicker()};
+}
+async function shrink(file){
+  try{const bmp=await createImageBitmap(file);const max=1400;const sc=Math.min(1,max/Math.max(bmp.width,bmp.height));
+    const c=document.createElement('canvas');c.width=Math.round(bmp.width*sc);c.height=Math.round(bmp.height*sc);
+    c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
+    const b=await new Promise(r=>c.toBlob(r,'image/jpeg',0.86));return b||file}catch(e){return file}
+}
+async function saveProduct(e){
+  e.preventDefault();
+  const name=$('#p-name').value.trim(),price=num($('#p-price').value);
+  if(!name||price==null){toast('請填寫產品名稱和售價');return}
+  const btn=$('#pSave');btn.disabled=true;btn.textContent='儲存中…';
+  const id=S.editing||S.db.collection('products').doc().id;
+  const old=S.products.find(x=>x.id===id);
+  try{
+    const photos=S.editPhotos.slice();
+    if(S.newFiles.length){
+      if(!S.assets)throw{code:'no_assets'};
+      for(const nf of S.newFiles){const blob=await shrink(nf.file);const up=await S.assets.upload(blob,{type:blob.type||nf.file.type});photos.push(up.id)}
+    }
+    const concerns=[...$('#sheet').querySelectorAll('input[name="con"]:checked')].map(i=>i.value);
+    await S.db.doc('products/'+id).set({name,jpName:$('#p-jp').value.trim(),brand:$('#p-brand').value.trim(),category:$('#p-cat').value,
+      price,status:$('#p-status').value,tag:$('#p-tag').value,concerns,
+      hkPrice:num($('#p-hk').value),salePrice:num($('#p-sale').value),saleEnds:$('#p-saleend').value,
+      limitQty:num($('#p-limit').value),maxPerOrder:num($('#p-max').value),jpPrice:num($('#p-jpp').value),
+      size:$('#p-size').value.trim(),expiry:$('#p-exp').value.trim(),releaseDate:$('#p-rel').value.trim(),
+      award:$('#p-award').value.trim(),cosmeScore:num($('#p-cosme').value),
+      desc:$('#p-desc').value.trim(),usage:$('#p-usage').value.trim(),ingredients:$('#p-ing').value.trim(),reviews:parseReviews($('#p-rev').value),
+      photos,photo:'',sold:old?.sold||0,example:false,createdAt:old?.createdAt||Date.now()});
+    const jpy=num($('#p-jpy').value),extra=num($('#p-extra').value);
+    if(jpy!=null||extra!=null)await S.db.doc('data/admin/costs/'+id).set({jpy:jpy||0,extra:extra||0});
+    if(old&&S.assets){const gone=photosOf(old).filter(x=>!photos.includes(x));gone.forEach(x=>S.assets.delete(x).catch(()=>{}))}
+    closeSheet();toast(old?'產品已更新':'產品已上架');
+  }catch(err){
+    btn.disabled=false;btn.textContent='再試一次';
+    const c=err&&err.code;
+    toast(c==='unsupported_type'?'相片格式不支援，請改用 JPG 或 PNG':c==='too_large'?'相片太大，請換一張較小的相片':c==='no_assets'?'你沒有上載相片的權限':c==='quota_or_state'?'相片儲存空間已滿，請先刪除舊相片':'未能儲存，請稍後再試');
+  }
+}
+async function deleteProduct(p){
+  try{
+    await S.db.doc('products/'+p.id).delete();
+    await S.db.doc('data/admin/costs/'+p.id).delete().catch(()=>{});
+    if(S.assets)photosOf(p).forEach(x=>S.assets.delete(x).catch(()=>{}));
+    for(const f of S.features){if((f.productIds||[]).includes(p.id)){try{await S.db.doc('features/'+f.id).update({productIds:f.productIds.filter(x=>x!==p.id)})}catch(e){}}}
+    delete S.cart[p.id];saveCart();closeSheet();toast('產品已刪除');
+  }catch(e){toast('未能刪除，請稍後再試')}
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-open],[data-cat],[data-con],[data-brand],[data-clearf],[data-close],[data-inc],[data-dec],[data-edit],[data-tab],[data-of],[data-omsg],[data-odel],[data-copy],[data-fedit]');if(!t)return;
+  const d=t.dataset;
+  if(d.open)openProduct(d.open);
+  else if(d.cat){S.filter=d.cat;renderStore()}
+  else if(d.con){const inSheet=!!t.closest('.sheet');S.concern=(S.concern===d.con&&!inSheet)?'':d.con;if(inSheet)closeSheet();renderStore();if(inSheet)$('#storefront').scrollIntoView({block:'start'})}
+  else if(d.brand){S.brand=d.brand;closeSheet();renderStore();$('#storefront').scrollIntoView({block:'start'})}
+  else if(t.hasAttribute('data-clearf')){S.brand='';S.concern='';renderStore()}
+  else if(t.hasAttribute('data-close'))closeSheet();
+  else if(d.inc){const p=S.products.find(x=>x.id===d.inc);const mx=p?maxOf(p):99;if((S.cart[d.inc]||0)>=mx){toast(`此產品每單最多 ${mx} 件`);return}S.cart[d.inc]=(S.cart[d.inc]||0)+1;saveCart();renderCartCount();openCart()}
+  else if(d.dec){const k=d.dec;S.cart[k]=(S.cart[k]||0)-1;if(S.cart[k]<=0)delete S.cart[k];saveCart();renderCartCount();openCart()}
+  else if(d.edit)openEditor(d.edit);
+  else if(d.fedit)openFeatureEditor(d.fedit);
+  else if(d.tab){S.tab=d.tab;S.settingsDirty=false;renderAdminPanel()}
+  else if(d.of){S.ofilter=d.of;renderAdminBody()}
+  else if(d.omsg)orderMsg(d.omsg);
+  else if(d.odel)deleteOrder(d.odel,t);
+  else if(d.copy!=null)copyText(d.copy,null);
+});
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset&&t.dataset.ost)setOrderStatus(t.dataset.ost,t.value)});
+let qT;$('#q').addEventListener('input',e=>{clearTimeout(qT);qT=setTimeout(()=>{S.q=e.target.value;renderShelves();renderGrid()},120)});
+$('#sort').addEventListener('change',e=>{S.sort=e.target.value;renderGrid()});
+$('#brandSel').addEventListener('change',e=>{S.brand=e.target.value;renderStore()});
+$('#cartBtn').onclick=openCart;
+$('#adminBtn').onclick=()=>{S.admin=!S.admin;$('#adminBtn').textContent=S.admin?'返回店面':'管理';$('#adminPanel').hidden=!S.admin;$('#storefront').hidden=S.admin;
+  if(S.admin){renderAdminPanel();$('#adminPanel').scrollIntoView({block:'start'})}};
+setInterval(()=>{renderRound();if(!S.admin&&$('#ov').hidden)renderShelves()},60000);
+
+/* ---------- boot ---------- */
+render();
+(async function boot(){
+  const c=window.claude;
+  const fail=m=>{S.loaded=true;$('#dbNotice').hidden=false;$('#dbNotice').textContent=m;renderGrid()};
+  if(!c||typeof c.use!=='function'){fail('目前未能連接產品資料，請稍後重新整理頁面。');return}
+  const [db,user]=await Promise.all([c.use('db'),c.use('user')]);
+  S.db=db;S.user=user;
+  if(user){try{S.canEdit=await user.canEdit()}catch(e){}}
+  if(S.canEdit){S.assets=await c.use('assets');$('#adminBtn').hidden=false}
+  if(!db){fail('請登入後再查看產品。');return}
+  let first=true;
+  db.collection('products').orderBy('createdAt','desc').onSnapshot(snap=>{
+    S.products=snap.docs.map(d=>({id:d.id,...d.data()}));S.loaded=true;render();
+    if(first){first=false;const h=(location.hash||'').match(/^#p-([A-Za-z0-9_\-]+)$/);if(h)openProduct(h[1])}
+  },()=>{S.loaded=true;renderGrid()});
+  db.collection('features').onSnapshot(snap=>{S.features=snap.docs.map(d=>({id:d.id,...d.data()}));renderShelves();if(S.admin&&S.tab==='features')renderAdminBody()});
+  db.doc('shop/settings').onSnapshot(s=>{S.settings=s.exists?s.data():{};renderShop();if(S.admin&&(S.tab!=='settings'||!S.settingsDirty))renderAdminBody()});
+  if(S.canEdit){
+    db.collection('data/admin/costs').onSnapshot(snap=>{const o={};snap.docs.forEach(d=>o[d.id]=d.data());S.costs=o;if(S.admin&&S.tab!=='settings')renderAdminBody()});
+    db.doc('data/admin/config/main').onSnapshot(s=>{S.config=s.exists?s.data():{}});
+    db.collection('data/admin/orders').orderBy('createdAt','desc').onSnapshot(snap=>{
+      S.orders=snap.docs.map(d=>({...d.data(),code:d.id}));if(S.admin){if(S.tab==='settings')return;renderAdminPanel()}});
+  }
+})();
+</script>
+
+</body></html>

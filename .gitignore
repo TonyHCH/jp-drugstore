@@ -1,0 +1,11 @@
+node_modules/
+.next/
+out/
+.env*
+!.env.example
+.vercel/
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+# 網上資料庫備份（將來可能含客人資料），只存於本機
+資料備份/

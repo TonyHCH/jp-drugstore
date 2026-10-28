@@ -200,16 +200,34 @@ const parseReviews = (t: string): Review[] => t.split('\n').map((l) => l.trim())
   return { name: parts[0].trim() || '客人', stars: Math.max(1, Math.min(5, num(parts[1]) || 5)), text: parts.slice(2).join('｜').trim() };
 }).filter((r) => r.text);
 
-async function shrink(file: File): Promise<Blob> {
+/* 相片統一處理：長邊最多 1400 像素，放入淺色正方形底，令貨架上每件產品大小一致 */
+async function shrink(file: Blob): Promise<Blob> {
   try {
     const bmp = await createImageBitmap(file);
-    const sc = Math.min(1, 1400 / Math.max(bmp.width, bmp.height));
+    const side = Math.min(1400, Math.max(bmp.width, bmp.height));
+    const sc = side / Math.max(bmp.width, bmp.height);
+    const w = Math.round(bmp.width * sc), h = Math.round(bmp.height * sc);
     const c = document.createElement('canvas');
-    c.width = Math.round(bmp.width * sc); c.height = Math.round(bmp.height * sc);
-    c.getContext('2d')!.drawImage(bmp, 0, 0, c.width, c.height);
-    const b = await new Promise<Blob | null>((r) => c.toBlob(r, 'image/jpeg', 0.86));
+    c.width = side; c.height = side;
+    const g = c.getContext('2d')!;
+    g.fillStyle = '#ffffff';
+    g.fillRect(0, 0, side, side);
+    g.drawImage(bmp, Math.round((side - w) / 2), Math.round((side - h) / 2), w, h);
+    const b = await new Promise<Blob | null>((r) => c.toBlob(r, 'image/jpeg', 0.88));
     return b || file;
   } catch { return file; }
+}
+
+/* 由網址取得相片（經伺服器下載），轉成可上載的檔案 */
+async function fileFromUrl(url: string): Promise<File> {
+  const { data } = await sb().auth.getSession();
+  const r = await fetch('/api/fetch-image', {
+    method: 'POST', headers: { 'content-type': 'application/json', Authorization: `Bearer ${data.session?.access_token || ''}` },
+    body: JSON.stringify({ url }),
+  });
+  if (!r.ok) { const j = await r.json().catch(() => ({})); throw new Error(j.error || '未能下載相片'); }
+  const blob = await r.blob();
+  return new File([blob], 'web.jpg', { type: blob.type || 'image/jpeg' });
 }
 
 function ProductEditor({ d, id, close, reload, toast }: { d: Data; id: string | null; close: () => void; reload: () => Promise<void>; toast: (s: string) => void }) {
@@ -228,6 +246,8 @@ function ProductEditor({ d, id, close, reload, toast }: { d: Data; id: string | 
   const [files, setFiles] = useState<{ file: File; url: string }[]>([]);
   const [busy, setBusy] = useState(false);
   const [sure, setSure] = useState(false);
+  const [imgUrl, setImgUrl] = useState('');
+  const [fetching, setFetching] = useState(false);
   const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value });
 
   const base = num(f.price) || 0, sp = num(f.sale_price), pr = sp != null && sp < base ? sp : base;
@@ -238,6 +258,7 @@ function ProductEditor({ d, id, close, reload, toast }: { d: Data; id: string | 
     e.preventDefault();
     const price = num(f.price);
     if (!f.name.trim() || price == null) { toast('請填寫產品名稱和售價'); return; }
+    if (!photos.length && !files.length && !p?.example) { toast('請先加最少一張產品相片，沒有相片的產品不能上架'); return; }
     setBusy(true);
     const db = sb();
     try {
@@ -311,14 +332,24 @@ function ProductEditor({ d, id, close, reload, toast }: { d: Data; id: string | 
               </div>))}
             {total < 5 && (
               <label className="addph">＋ 加相
-                <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={(e) => {
+                <input type="file" accept="image/*" multiple onChange={(e) => {
                   const room = 5 - total;
                   setFiles([...files, ...[...(e.target.files || [])].slice(0, room).map((file) => ({ file, url: URL.createObjectURL(file) }))]);
                   e.target.value = '';
                 }} />
               </label>)}
           </div>
-          <p className="hint">建議用買手在店內拍的實物相，系統會自動壓縮。</p>
+          {total < 5 && (
+            <div className="urlimp">
+              <input type="url" inputMode="url" placeholder="或貼上相片網址" value={imgUrl} onChange={(e) => setImgUrl(e.target.value)} aria-label="相片網址" />
+              <button className="btn sm" type="button" disabled={!imgUrl.trim() || fetching} onClick={async () => {
+                setFetching(true);
+                try { const file = await fileFromUrl(imgUrl.trim()); setFiles([...files, { file, url: URL.createObjectURL(file) }]); setImgUrl(''); }
+                catch (err) { toast(err instanceof Error ? err.message : '未能下載相片'); }
+                setFetching(false);
+              }}>{fetching ? '下載中…' : '加入'}</button>
+            </div>)}
+          <p className="hint">最少一張，第一張做封面。手機上按「加相」可以即場影相；相片會自動壓縮並放入白色正方形底，貨架上大小一致。</p>
         </div>
         <fieldset className="grp"><legend>基本資料</legend>
           <div className="fld"><label htmlFor="p-name">產品名稱（中文）</label><input id="p-name" required value={f.name} onChange={set('name')} placeholder="肌研極潤玻尿酸化妝水" /></div>

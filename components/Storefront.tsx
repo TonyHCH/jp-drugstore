@@ -25,13 +25,72 @@ type Sheet =
 
 interface Props { products: Product[]; features: Feature[]; settings: Settings; openId?: string; error?: string }
 
-const phChar = (p: Product) => ((p.jp_name || p.name || '?').trim()[0]) || '?';
 
-function Photo({ p, i = 0, sizes }: { p: Product; i?: number; sizes: string }) {
+/* 未有相片時的原創設計卡：按分類配色及圖示，顯示品牌和產品名，令客人仍能一眼看出產品類型 */
+const CAT_ICON: Record<string, string> = {
+  護膚: 'M9 3h6v3l2 3v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-3z M9 12h6',
+  化妝: 'M10 3h4l1 6h-6z M8 9h8v12H8z',
+  保健品: 'M8.5 4.5a4.95 4.95 0 0 1 7 7l-4 4a4.95 4.95 0 0 1-7-7z M6.5 10.5l7 7 M14 18a3 3 0 1 0 6 0a3 3 0 1 0-6 0',
+  日用品: 'M4 8l8-4 8 4v9l-8 4-8-4z M4 8l8 4 8-4 M12 12v9',
+};
+function NoPhoto({ p, big = false }: { p: Product; big?: boolean }) {
+  const short = (p.name || '').replace(p.brand || '', '').trim() || p.name;
+  return (
+    <div className={`nophoto cat-${CATS.indexOf(p.category) + 1}${big ? ' big' : ''}`} aria-label={`${p.name}（相片準備中）`}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d={CAT_ICON[p.category] || CAT_ICON['護膚']} /></svg>
+      {p.brand && <span className="np-brand">{p.brand}</span>}
+      <span className="np-name">{short}</span>
+      <span className="np-note">相片準備中</span>
+    </div>
+  );
+}
+
+function Photo({ p, i = 0, sizes, big = false }: { p: Product; i?: number; sizes: string; big?: boolean }) {
   const [bad, setBad] = useState(false);
   const src = p.photos?.[i];
-  if (!src || bad) return <div className="ph">{phChar(p)}</div>;
+  if (!src || bad) return <NoPhoto p={p} big={big} />;
   return <Image src={photoUrl(src)} alt={p.name} fill sizes={sizes} onError={() => setBad(true)} />;
+}
+
+/* 產品頁相集：左右掃動切換，點擊放大全螢幕 */
+function Gallery({ p, now }: { p: Product; now: number }) {
+  const [gi, setGi] = useState(0);
+  const [zoom, setZoom] = useState<number | null>(null);
+  const track = useRef<HTMLDivElement>(null);
+  const n = p.photos.length;
+  const go = (i: number) => { const el = track.current; if (el) el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' }); setGi(i); };
+  if (!n) return <div className="gal-main"><NoPhoto p={p} big /><Badges p={p} now={now} /></div>;
+  return (
+    <>
+      <div className="gal-wrap">
+        <div className="gal-track" ref={track} onScroll={(e) => { const el = e.currentTarget; setGi(Math.round(el.scrollLeft / Math.max(1, el.clientWidth))); }}>
+          {p.photos.map((x, i) => (
+            <button key={x} type="button" className="gal-slide" onClick={() => setZoom(i)} aria-label={`放大第${i + 1}張相片`}>
+              <Image src={photoUrl(x)} alt={`${p.name} 相片 ${i + 1}`} fill sizes="(max-width:600px) 100vw, 560px" priority={i === 0} />
+            </button>))}
+        </div>
+        <Badges p={p} now={now} />
+        {n > 1 && <span className="gal-count">{gi + 1} / {n}</span>}
+        <span className="gal-hint">點擊放大</span>
+      </div>
+      {n > 1 && (
+        <div className="gal-thumbs">{p.photos.map((x, i) => (
+          <button key={x} type="button" aria-pressed={i === gi} aria-label={`第${i + 1}張相片`} onClick={() => go(i)} style={{ position: 'relative' }}>
+            <Image src={photoUrl(x)} alt="" fill sizes="56px" />
+          </button>))}</div>)}
+      {zoom != null && (
+        <div className="zoom" onClick={() => setZoom(null)} role="dialog" aria-label="相片放大">
+          {/* 放大檢視用原圖，方便看清成分表和日文說明 */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={photoUrl(p.photos[zoom])} alt={`${p.name} 相片 ${zoom + 1}`} onClick={(e) => e.stopPropagation()} />
+          <button type="button" className="zoom-x" onClick={() => setZoom(null)} aria-label="關閉">×</button>
+          {n > 1 && <>
+            <button type="button" className="zoom-nav prev" aria-label="上一張" onClick={(e) => { e.stopPropagation(); setZoom((zoom + n - 1) % n); }}>‹</button>
+            <button type="button" className="zoom-nav next" aria-label="下一張" onClick={(e) => { e.stopPropagation(); setZoom((zoom + 1) % n); }}>›</button>
+          </>}
+        </div>)}
+    </>
+  );
 }
 
 function Badges({ p, now }: { p: Product; now: number }) {
@@ -359,7 +418,6 @@ function ProductSheet(props: {
   onBrand: (b: string) => void; onConcern: (c: string) => void; toast: (s: string) => void;
 }) {
   const { p, now, products, inCart, Card, close, toast } = props;
-  const [gi, setGi] = useState(0);
   const [qty, setQty] = useState(1);
   const max = maxOf(p), r = remaining(p), sv = savePct(p, now), sold = isSoldout(p);
   const specs: [string, string][] = ([
@@ -378,12 +436,7 @@ function ProductSheet(props: {
   return (
     <>
       <SheetHead title={p.name} close={close} />
-      <div className="gal-main"><Photo key={gi} p={p} i={gi} sizes="(max-width:600px) 100vw, 560px" /><Badges p={p} now={now} /></div>
-      {p.photos.length > 1 && (
-        <div className="gal-thumbs">{p.photos.map((x, i) => (
-          <button key={x} type="button" aria-pressed={i === gi} aria-label={`第${i + 1}張相片`} onClick={() => setGi(i)} style={{ position: 'relative' }}>
-            <Image src={photoUrl(x)} alt="" fill sizes="56px" />
-          </button>))}</div>)}
+      <Gallery p={p} now={now} />
       <div style={{ marginTop: 12 }}>
         {p.brand && <button type="button" className="cbrand" onClick={() => props.onBrand(p.brand)} style={{ border: 0, background: 'none', padding: 0, textDecoration: 'underline' }}>{p.brand}</button>}
         {p.jp_name && <div className="cjp" style={{ whiteSpace: 'normal' }}>{p.jp_name}</div>}
